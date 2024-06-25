@@ -1,0 +1,16 @@
+<template name="ValidityTabbed">
+    <div class="ValidityTabbed">
+
+        {{#if haveValidities }}
+
+            {{> coreTabbedTemplate (parmsTabbed) }}
+            {{> validities_band (parmsBand) }}
+
+        {{else}}
+
+            {{> Template.dynamic template=(itemTemplate) data=(itemData) }}
+
+        {{/if}}
+
+    </div>
+</template>

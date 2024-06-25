@@ -1,0 +1,85 @@
+/*
+ * pwix:validity/src/client/stylesheets/validity.less
+ */
+
+.c-validities-band {
+    width: 100%;
+    margin-top: 0.5em;
+    .band {
+        height: 0.75em;
+        border: 1px solid lightgray;
+        display: flex;
+    }
+    .band .free {
+        background-color: rgb(255, 249, 178);
+        height: inherit;
+    }
+    .band .used {
+        background-color: teal; //@darkteal;
+        height: inherit;
+    }
+    .band .last {
+        flex-grow: 1;
+    }
+}
+
+.c-validities-fieldset {
+    .spacing {
+        min-width: 0.5em;
+    }
+    margin: 0.5em 0;
+}
+
+.c-validities-panel {
+    padding: 0 5em;
+    height: 100%;
+
+    div.with {
+        padding-top: 2em;
+        padding-bottom: 2em;
+        height: 100%;
+        p.text {
+            margin-bottom: 1em;
+        }
+        table {
+            width: 100%;
+            tr:nth-child( 2n+1 ){
+                background-color: lighten( black, 85% );;;
+            }
+            tr:hover {
+                background-color: lighten( black, 80% );;
+            }
+            td {
+                padding-top: 0.25em;
+                padding-bottom: 0.25em;
+            }
+            td:first-child {
+                padding-left: 0.25em;
+            }
+            td:last-child {
+                padding-right: 0.25em;
+            }
+        }
+    }
+
+    .without {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+}
+
+.c-validities-plus {
+    a.dropdown-item {
+        text-decoration: none;
+    }
+}
+
+.c-validities-tabbed .tab-pane {
+    // have a special display for fields which are not equals between different validity records
+    .val-differents {
+        color: gray;
+        font-style: italic;
+    }
+}

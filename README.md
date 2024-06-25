@@ -10,7 +10,7 @@ Any object may be defined with validity periods. The used taxonomy is:
 
 - each validity period of the object (of the *entity*) is materialized in the database as a distinct document, called a *record* (or a *validity record* when we want point out the fact).
 
-We do not define here any data, apart from the entity identifier, which would be common to all validity records
+We do not define here any data, apart from the entity identifier, which would be common to all validity records.
 
 ## Installation
 
