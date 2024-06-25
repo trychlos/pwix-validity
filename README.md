@@ -4,6 +4,14 @@
 
 A package to manage validity periods in Meteor.
 
+Any object may be defined with validity periods. The used taxonomy is:
+
+- the object as a whole is named an *entity* (and identified by an entity id)
+
+- each validity period of the object (of the *entity*) is materialized in the database as a distinct document, called a *record* (or a *validity record* when we want point out the fact).
+
+We do not define here any data, apart from the entity identifier, which would be common to all validity records
+
 ## Installation
 
 This Meteor package is installable with the usual command:
