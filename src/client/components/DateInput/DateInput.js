@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/date_input/date_input.js
+ * /imports/client/components/DateInput/DateInput.js
  *
  * A component for date input and visual validation by the user:
  * - have an input field with a date picker
@@ -14,18 +14,18 @@
  * - help_format: the desired help format, defaulting to '%e %b %Y'
  * - withHelp: whether we make use of help format, defaulting to true
  * - withBootstrapClasses: whether the caller makes use of Bootstrap classes to indicate validity status (increasing width), defaulting to false
- * - withCheckIndicator: whether the caller makes use of the coreFieldCheckIndicator CoreApp component to indicate validity status (adding an element), defaulting to false
+ * - withCheckIndicator: whether the caller makes use of the FormsCheckStatusIndicator component to indicate validity status (adding an element), defaulting to false
  *
  * Triggers a 'date-input-data' event with the date as a Date (or null if invalid).
  */
 
-import { CoreApp } from 'meteor/pwix:core-app';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Random } from 'meteor/random';
+import { UIU } from 'meteor/pwix:ui-utils';
 
-import './date_input.html';
+import './DateInput.html';
 
-Template.date_input.onCreated( function(){
+Template.DateInput.onCreated( function(){
     const self = this;
 
     self.APP = {
@@ -40,11 +40,11 @@ Template.date_input.onCreated( function(){
         // update the help text and send the data event
         help(){
             if( self.view.isRendered ){
-                const str = self.$( '.c-date-input input' ).val();
+                const str = self.$( '.DateInput input' ).val();
                 const d = Validity.Date.sanitize( str );
                 const help = d ? Validity.Date.toString( d, { format: self.APP.help_format }) : '&nbsp;';
-                self.$( '.c-date-input p.help' ).html( help );
-                self.$( '.c-date-input' ).trigger( 'date-input-data', { name: self.APP.name, date: d });
+                self.$( '.DateInput p.help' ).html( help );
+                self.$( '.DateInput' ).trigger( 'date-input-data', { name: self.APP.name, date: d });
             }
         }
     };
@@ -52,13 +52,13 @@ Template.date_input.onCreated( function(){
     self.APP.jqInput = Validity.Date.strftime2jquery( self.APP.input_format );
 });
 
-Template.date_input.onRendered( function(){
+Template.DateInput.onRendered( function(){
     const self = this;
 
     // initialize the datepicker DOM element
-    const selector = '.c-date-input#'+self.APP.id+' input';
+    const selector = '.DateInput#'+self.APP.id+' input';
     const defaultValue = Template.currentData().defaultValue || null;
-    CoreApp.DOM.waitFor( selector )
+    UIU.DOM.waitFor( selector )
         .then(( element ) => {
             self.$( selector ).datepicker({
                 dateFormat: self.APP.jqInput,
@@ -86,7 +86,7 @@ Template.date_input.onRendered( function(){
     });
 });
 
-Template.date_input.helpers({
+Template.DateInput.helpers({
     // the classes of the input field
     dClass(){
         return this.withBootstrapClasses === true ? 'ca-wdate-coched' : 'ca-wdate';
@@ -110,15 +110,10 @@ Template.date_input.helpers({
     // component random identifier
     id(){
         return Template.instance().APP.id;
-    },
-
-    // parms for coreFieldCheckIndicator
-    parmsCheckIndicator(){
-        return {};
     }
 });
 
-Template.date_input.events({
+Template.DateInput.events({
     // open the datepicker when clicking the icon
     'click .js-dp'( event, instance ){
         const $dp = instance.$( event.currentTarget ).closest( '.input-svg-at-end' ).find( 'input' );

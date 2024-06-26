@@ -1,19 +1,19 @@
 <template name="ValidityFieldset">
-    <div class="validity-fieldset">
+    <div class="ValidityFieldset">
 
         <table class="form-table">
             <tr>
                 <td class="ui-w50 js-start">
                     <fieldset>
                         <legend>{{ i18n key="panel.start_legend" }}</legend>
-                        {{> date_input (parmsStartDate) }}
+                        {{> DateInput (parmsStartDate) }}
                     </fieldset>
                 </td>
                 <td class="spacing"></td>
                 <td class="ui-w50 js-end">
                     <fieldset>
                         <legend>{{ i18n key="panel.end_legend" }}</legend>
-                        {{> date_input (parmsEndDate) }}
+                        {{> DateInput (parmsEndDate) }}
                     </fieldset>
                 </td>
             </tr>

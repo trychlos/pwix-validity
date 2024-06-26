@@ -1,5 +1,5 @@
-<template name="date_input">
-    <div class="x-component c-date-input" id="{{ id }}">
+<template name="DateInput">
+    <div class="DateInput" id="{{ id }}">
 
         <div class="d-flex align-items-center">
             <div class="input-svg-at-end">
@@ -7,7 +7,7 @@
                 <span class="fa-regular fa-sm fa-calendar-days group-end js-dp"></span>
             </div>
             {{#if haveIndicator }}
-                {{> coreFieldCheckIndicator (parmsCheckIndicator) }}
+                {{> FormsCheckStatusIndicator }}
             {{/if}}
             {{#if hasHelp }}
                 <p class="help">{{ dHelp }}</p>
