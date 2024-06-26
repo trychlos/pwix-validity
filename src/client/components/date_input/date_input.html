@@ -1,0 +1,18 @@
+<template name="date_input">
+    <div class="x-component c-date-input" id="{{ id }}">
+
+        <div class="d-flex align-items-center">
+            <div class="input-svg-at-end">
+                <input type="text" class="form-control {{ dClass }} js-date" minlength="10" maxlength="10" value="" placeholder="{{ dPlaceholder }}" />
+                <span class="fa-regular fa-sm fa-calendar-days group-end js-dp"></span>
+            </div>
+            {{#if haveIndicator }}
+                {{> coreFieldCheckIndicator (parmsCheckIndicator) }}
+            {{/if}}
+            {{#if hasHelp }}
+                <p class="help">{{ dHelp }}</p>
+            {{/if}}
+        </div>
+
+    </div>
+</template>

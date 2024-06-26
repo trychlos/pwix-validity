@@ -7,10 +7,10 @@
  * This top ValidityTabbed component have one tab per validity period, each of these validity tabs itself
  *  containing all the properties for the edited entity, and so (in the case of an organization for example), several
  *  organization tabs.
- * When needed, validity tabs periods can be identified through the tab identifier allocated and advertized by the coreTabbedTemplate component.
+ * When needed, validity tabs periods can be identified through the tab identifier allocated and advertized by the Tabbed component.
  *
  * Parms:
- * - group: the item group, as an object { entity, items } - null when new
+ * - entity: the to-be-edited item entity, as a ReactiveVar, including a DYN.records array - empty if new
  * - template: the to-be-included Blaze template name
  * - startField: name of the field which contains the starting effect date, defaulting to 'effectStart'
  * - endField: name of the field which contains the ending effect date, defaulting to 'effectEnd'
@@ -26,21 +26,21 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 //import '/imports/client/components/date_input/date_input.js';
-import '../validities_band/validities_band.js';
+import '../validity_band/validity_band.js';
 //import '/imports/client/components/validities_fieldset/validities_fieldset.js';
-//import '/imports/client/components/validities_panel/validities_panel.js';
-//import '/imports/client/components/validities_plus/validities_plus.js';
+import '../validity_panel/validity_panel.js';
+import '../validity_plus/validity_plus.js';
 
 import './ValidityTabbed.html';
 
 Template.ValidityTabbed.onCreated( function(){
     const self = this;
 
-    self.APP = {
+    self.PCK = {
         addons: [
             {
-                tab_label: 'validities.tab.holes',
-                tab_panel: 'validities_panel'
+                tab_label: 'tab.holes',
+                tab_panel: 'validity_panel'
             }
         ],
 
@@ -48,51 +48,48 @@ Template.ValidityTabbed.onCreated( function(){
         startField: null,
         endField: null,
 
-        // the currently edited items
-        //  a copy of the original from group, plus maybe added new validity periods - and at least one item if new
-        edited: new ReactiveVar( null ),
-
-        // each time 'edited' changes, recomputes the current vality periods
+        // each time the item changes, recomputes the current vality periods
         periods: new ReactiveVar( [], _.isEqual ),
 
         // each time, the validity periods change, recompute holes and tabs
         holes: new ReactiveVar( [], _.isEqual ),
-        tabs: new ReactiveVar( [], ( a, b ) => { return self.APP.compareTabs( a, b ); }),
+        tabs: new ReactiveVar( [], ( a, b ) => { return self.PCK.compareTabs( a, b ); }),
 
         // build the list of tabs
-        //  note that the list of tabs only depends on the validity periods - so we also keep the last periods array
+        //  note that the list of tabs only depends of the validity periods - so we also keep the last periods array
         prevPeriods: [],
-        buildTabs( edited ){
+        buildTabs( entity ){
             let tabs = [];
-            for( let i=0 ; i<edited.length ; ++i ){
+            for( let i=0 ; i<entity.DYN.records.length ; ++i ){
+                const record = entity.DYN.records[i];
                 tabs.push({
-                    navLabel: self.APP.itemLabel( edited[i], i ),
+                    navLabel: self.PCK.itemLabel( record, i ),
                     paneTemplate: Template.currentData().template,
                     paneData: {
                         ...Template.currentData(),
-                        edited: self.APP.edited,
-                        item: edited[i]
+                        entity: Template.currentData().entity,
+                        record: record
                     }
                 });
             }
-            self.APP.addons.every(( it ) => {
+            self.PCK.addons.every(( it ) => {
                 tabs.push({
                     navLabel: pwixI18n.label( I18N, it.tab_label ),
                     paneTemplate: it.tab_panel,
                     paneData: {
                         ...Template.currentData(),
-                        holes: self.APP.holes,
-                        newPeriodCb: self.APP.onNewPeriod
+                        holes: self.PCK.holes,
+                        newPeriodCb: self.PCK.onNewPeriod
                     }
                 });
                 return true;
             });
             tabs.push({
-                navTemplate: 'validities_plus',
+                navTemplate: 'validity_plus',
                 navData: {
                     classes: 'nav-link',
-                    holes: self.APP.holes,
-                    newPeriodCb: self.APP.onNewPeriod
+                    holes: self.PCK.holes,
+                    newPeriodCb: self.PCK.onNewPeriod
                 }
             });
             //console.debug( 'tabs', tabs );
@@ -102,9 +99,9 @@ Template.ValidityTabbed.onCreated( function(){
         // tabs array is a reactive var
         //  in order to only 'set' when it changes, compare the new value with the old one - and actually compare
         compareTabs( a, b ){
-            const equals = _.isEqual( self.APP.prevPeriods, self.APP.periods.get());
+            const equals = _.isEqual( self.PCK.prevPeriods, self.PCK.periods.get());
             if( !equals ){
-                self.APP.prevPeriods = _.cloneDeep( self.APP.periods.get());
+                self.PCK.prevPeriods = _.cloneDeep( self.PCK.periods.get());
             }
             return equals;
         },
@@ -112,14 +109,12 @@ Template.ValidityTabbed.onCreated( function(){
         // provides the translated label associated with this tab
         itemLabel( it, index ){
             let res = '';
-            const appDate = Meteor.APP.Date;
-            const thisAPP = self.APP;
-            if( !appDate.isValid( it[thisAPP.startField] ) && !appDate.isValid( it[thisAPP.endField] )){
-                res = pwixI18n.label( I18N, 'validities.tab.full' );
-            } else if( appDate.isValid( it[thisAPP.startField] )){
-                res = pwixI18n.label( I18N, 'validities.tab.from', appDate.toString( it[thisAPP.startField] ));
+            if( !Validity.Date.isValid( it[thiself.PCKsAPP.startField] ) && !Validity.Date.isValid( it[self.PCK.endField] )){
+                res = pwixI18n.label( I18N, 'tab.full' );
+            } else if( Validity.Date.isValid( it[self.PCK.startField] )){
+                res = pwixI18n.label( I18N, 'tab.from', Validity.Date.toString( it[self.PCK.startField] ));
             } else {
-                res = pwixI18n.label( I18N, 'validities.tab.to', appDate.toString( it[thisAPP.endField] ));
+                res = pwixI18n.label( I18N, 'tab.to', Validity.Date.toString( it[self.PCK.endField] ));
             }
             // add a dropdown menu for all periods
             return ''
@@ -128,7 +123,7 @@ Template.ValidityTabbed.onCreated( function(){
                 +'<div class="dropdown">'
                 +'  <a class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></a>'
                 +'  <ul class="dropdown-menu">'
-                + thisAPP.tabDropdown( it, index )
+                + self.PCK.tabDropdown( it, index )
                 +'  </ul>'
                 +'</div>';
         },
@@ -136,29 +131,33 @@ Template.ValidityTabbed.onCreated( function(){
         // merge with previous period
         //  this means we keep the displayed data, removing the previous period data, keeping only its starting date
         mergeLeft( index ){
-            let edited = self.APP.edited.get();
-            const removed = edited.splice( index-1, 1 );
-            edited[index-1][this.startField] = removed[0][this.startField];
-            self.APP.edited.set( edited );
-            self.APP.tabbedActivate( index-1 );
+            const entityRv = Template.currentData.entity;
+            check( entityRv, ReactiveVar );
+            let entity = entityRv.get();
+            const removed = entity.DYN.records.splice( index-1, 1 );
+            entity.DYN.records[index-1][this.startField] = removed[0][this.startField];
+            entityRv.set( entity );
+            self.PCK.tabbedActivate( index-1 );
         },
 
         // merge with next period
         //  this means we keep the displayed data, removing the next period data, keeping only its ending date
         mergeRight( index ){
-            let edited = self.APP.edited.get();
-            const removed = edited.splice( index+1, 1 );
-            edited[index][this.endField] = removed[0][this.endField];
-            self.APP.edited.set( edited );
-            self.APP.tabbedActivate( index );
+            const entityRv = Template.currentData.entity;
+            check( entityRv, ReactiveVar );
+            let entity = entityRv.get();
+            const removed = entity.DYN.records.splice( index+1, 1 );
+            entity.DYN.records[index][this.endField] = removed[0][this.endField];
+            entityRv.set( entity );
+            self.PCK.tabbedActivate( index );
         },
 
         // show informations about the record
         miInfo( index ){
-            const edited = self.APP.edited.get();
-            const obj = edited[index];
+            const entity = Template.currentData.entity.get();
+            const obj = entity.DYN.records[index];
             Modal.run({
-                mdTitle: pwixI18n.label( I18N, 'validities.tab.mi_title' ),
+                mdTitle: pwixI18n.label( I18N, 'tab.mi_title' ),
                 mdBody: 'miPanel',
                 mdButtons: [ Modal.C.Button.CLOSE ],
                 name: obj.label,
@@ -170,108 +169,100 @@ Template.ValidityTabbed.onCreated( function(){
         //  argument is the chosen free validity period as an object { start, end }
         onNewPeriod( period ){
             // build and order a new record
-            const res = Meteor.APP.Validity.newRecord( self.APP.edited.get(), period, { start: self.APP.startField, end: self.APP.endField });
-            self.APP.edited.set( res.array );
-            self.APP.tabbedActivate( res.index );
+            const entityRv = Template.currentData.entity;
+            check( entityRv, ReactiveVar );
+            let entity = entityRv.get();
+            const res = Validity.newRecord( entity, period, { start: self.PCK.startField, end: self.PCK.endField });
+            entity.DYN.records = res.records;
+            entityRv.set( entity );
+            self.PCK.tabbedActivate( res.index );
         },
 
         // remove the identified period
         removePeriod( index ){
-            let edited = self.APP.edited.get();
-            edited.splice( index, 1 );
-            const nextActive = ( index >= edited.length ) ? edited.length-1 : index;
-            self.APP.edited.set( edited );
-            self.APP.tabbedActivate( nextActive );
+            const entityRv = Template.currentData.entity;
+            check( entityRv, ReactiveVar );
+            let entity = entityRv.get();
+            entity.DYN.records.splice( index, 1 );
+            const nextActive = ( index >= entity.DYN.records.length ) ? entity.DYN.records.length-1 : index;
+            entityRv.set( entity );
+            self.PCK.tabbedActivate( nextActive );
         },
 
         // build a dropdown menu depending of the current item
         //  we are already sure that we have more than one
         tabDropdown( it, index ){
-            const length = self.APP.edited.get().length;
+            const length = Template.currentData.entity.get().DYN.records.length;
             let res = '';
             if( length > 1 ){
-                res += '<li><a class="dropdown-item js-remove" href="#">'+pwixI18n.label( I18N, 'validities.tab.remove' )+'</a></li>'
+                res += '<li><a class="dropdown-item js-remove" href="#">'+pwixI18n.label( I18N, 'tab.remove' )+'</a></li>'
                 if( index > 0 ){
-                    res += '<li><a class="dropdown-item js-mergeleft" href="#">'+pwixI18n.label( I18N, 'validities.tab.mergeleft' )+'</a></li>'
+                    res += '<li><a class="dropdown-item js-mergeleft" href="#">'+pwixI18n.label( I18N, 'tab.mergeleft' )+'</a></li>'
                 }
                 if( index < length-1 ){
-                    res += '<li><a class="dropdown-item js-mergeright" href="#">'+pwixI18n.label( I18N, 'validities.tab.mergeright' )+'</a></li>'
+                    res += '<li><a class="dropdown-item js-mergeright" href="#">'+pwixI18n.label( I18N, 'tab.mergeright' )+'</a></li>'
                 }
             }
-            res += '<li><a class="dropdown-item js-miinfos '+( it._id ? '' : 'disabled' )+'" href="#">'+pwixI18n.label( I18N, 'validities.tab.mi_info' )+'</a></li>'
+            res += '<li><a class="dropdown-item js-miinfos '+( it._id ? '' : 'disabled' )+'" href="#">'+pwixI18n.label( I18N, 'tab.mi_info' )+'</a></li>'
             return res;
         },
 
         tabbedActivate( index ){
-            self.APP.tabbbedTrigger( 'tabbed-do-activate', { index: index });
+            self.PCK.tabbbedTrigger( 'tabbed-do-activate', { index: index });
         },
 
         // trigger an event to our coreTabbedTemplate
         tabbbedTrigger( event, data ){
-            const tabbed = self.$( '.c-validities-tabbed > .ca-tabbed-template' ).data( 'tabbed-id' );
-            self.$( '.c-validities-tabbed > .ca-tabbed-template' ).trigger( event, {
+            const tabbed = self.$( '.ValidityTabbed > .tabbed-template' ).data( 'tabbed-id' );
+            self.$( '.ValidityTabbed > .tabbed-template' ).trigger( event, {
                 ...data,
                 tabbedId: tabbed
             });
         }
     };
 
-    // get the provided items group to be edited
-    // nb: if the caller doesn't manage validities, it is expected to pass the to-be-edited item directly in the 'group'
-    const group = Template.currentData().group;
-    const withValidities = Boolean( Template.currentData().withValidities !== false );
-    //let edited = _.cloneDeep( group ? ( withValidities ? group.items : [ group ] ) : [{}] );
-    // pwi 2024- 1-20 cancel the above cloneDeep
-    let edited = group ? ( withValidities ? group.items : [ group ] ) : [{}] ;
-    self.APP.edited.set( edited );
-
     // get starting and ending effect field names
-    self.APP.startField = Template.currentData().startField || 'effectStart';
-    self.APP.endField = Template.currentData().endField || 'effectEnd';
+    self.PCK.startField = Template.currentData().startField || 'effectStart';
+    self.PCK.endField = Template.currentData().endField || 'effectEnd';
 
-    // track the validity periods from the 'edited' array
+    // track the validity periods from the 'entity.DYN.records' array
     self.autorun(() => {
         let periods = [];
-        self.APP.edited.get().every(( it ) => {
-            periods.push({ start: it[self.APP.startField], end: it[self.APP.endField] });
-            return true;
+        const entityRv = Template.currentData().entity;
+        check( entityRv, ReactiveVar );
+        console.debug( entityRv );
+        entityRv.get().DYN.records.forEach(( it ) => {
+            periods.push({ start: it[self.PCK.startField], end: it[self.PCK.endField] });
         });
-        self.APP.periods.set( periods );
+        self.PCK.periods.set( periods );
     });
 
-    // track the validity holes from the 'edited' array
+    // track the validity holes from the 'entity.DYN.records' array
     self.autorun(() => {
         let validities = [];
-        self.APP.periods.get().every(( it ) => {
-            validities.push({ start: it.start, end: it.end });
-            return true;
+        self.PCK.periods.get().forEach(( it ) => {
+            push({ start: it.start, end: it.end });
         });
-        const holes = Meteor.APP.Validity.holes( validities, {
+        const holes = Validity.holes( validities, {
             start: 'start',
             end: 'end'
         });
-        self.APP.holes.set( holes );
-    });
-
-    // track edited records
-    self.autorun(() => {
-        console.debug( 'edited', self.APP.edited.get());
+        self.PCK.holes.set( holes );
     });
 
     // track periods
     self.autorun(() => {
-        console.debug( 'periods', self.APP.periods.get());
+        console.debug( 'periods', self.PCK.periods.get());
     });
 
     // track holes
     self.autorun(() => {
-        console.debug( 'holes', self.APP.holes.get());
+        console.debug( 'holes', self.PCK.holes.get());
     });
 
     // track edited to dynamically rebuild tabs
     self.autorun(() => {
-        const edited = self.APP.edited.get();
-        self.APP.tabs.set( self.APP.buildTabs( edited ));
+        self.PCK.tabs.set( self.PCK.buildTabs( Template.currentData().entity.get()));
     });
 });
 
@@ -279,17 +270,17 @@ Template.ValidityTabbed.onRendered( function(){
     const self = this;
 
     // set events target here if we run inside of a modal
-    const $modal = self.$( '.c-validities-tabbed' ).closest( '.modal-content' );
+    const $modal = self.$( '.ValidityTabbed' ).closest( '.modal-content' );
     if( $modal && $modal.length ){
-        Modal.set({ target: self.$( '.c-validities-tabbed' ) });
+        Modal.set({ target: self.$( '.ValidityTabbed' ) });
     }
 
     // publish the edited reactive var (once)
-    self.$( '.c-validities-tabbed' ).trigger( 'iz-edited-rv', { edited: self.APP.edited });
+    self.$( '.ValidityTabbed' ).trigger( 'iz-edited-rv', { edited: Template.currentData().entity });
 
     // setup default active tab to the closest record
-    const res = Meteor.APP.Validity.closest( self.APP.edited.get());
-    self.APP.tabbedActivate( res.index );
+    const res = Validity.closest( Template.currentData().entity.get());
+    self.PCK.tabbedActivate( res.index );
 
 });
 
@@ -312,14 +303,14 @@ Template.ValidityTabbed.helpers({
     // data context to be passed to the validities band
     parmsBand(){
         return {
-            periods: Template.instance().APP.holes.get()
+            periods: Template.instance().PCK.holes.get()
         };
     },
 
     // defines the list of tabs to be displayed
     parmsTabbed(){
         return {
-            tabs: Template.instance().APP.tabs.get(),
+            tabs: Template.instance().PCK.tabs.get(),
             navPosition: 'bottom'
         }
     }
@@ -329,9 +320,9 @@ Template.ValidityTabbed.events({
     'click .nav-link .js-mergeleft'( event, instance ){
         //console.debug( event );
         const index = instance.$( event.currentTarget ).closest( 'button.nav-link' ).data( 'tabbed-index' );
-        Bootbox.confirm( pwixI18n.label( I18N, 'validities.panel.confirm_mergeleft' ), function( ret ){
+        Bootbox.confirm( pwixI18n.label( I18N, 'panel.confirm_mergeleft' ), function( ret ){
             if( ret ){
-                instance.APP.mergeLeft( index );
+                instance.PCK.mergeLeft( index );
             }
         });
     },
@@ -339,9 +330,9 @@ Template.ValidityTabbed.events({
     'click .nav-link .js-mergeright'( event, instance ){
         //console.debug( event );
         const index = instance.$( event.currentTarget ).closest( 'button.nav-link' ).data( 'tabbed-index' );
-        Bootbox.confirm( pwixI18n.label( I18N, 'validities.panel.confirm_mergeright' ), function( ret ){
+        Bootbox.confirm( pwixI18n.label( I18N, 'panel.confirm_mergeright' ), function( ret ){
             if( ret ){
-                instance.APP.mergeRight( index );
+                instance.PCK.mergeRight( index );
             }
         });
     },
@@ -349,15 +340,15 @@ Template.ValidityTabbed.events({
     'click .nav-link .js-miinfos'( event, instance ){
         //console.debug( event );
         const index = instance.$( event.currentTarget ).closest( 'button.nav-link' ).data( 'tabbed-index' );
-        instance.APP.miInfo( index );
+        instance.PCK.miInfo( index );
     },
 
     'click .nav-link .js-remove'( event, instance ){
         //console.debug( event );
         const index = instance.$( event.currentTarget ).closest( 'button.nav-link' ).data( 'tabbed-index' );
-        Bootbox.confirm( pwixI18n.label( I18N, 'validities.panel.confirm_remove' ), function( ret ){
+        Bootbox.confirm( pwixI18n.label( I18N, 'panel.confirm_remove' ), function( ret ){
             if( ret ){
-                instance.APP.removePeriod( index );
+                instance.PCK.removePeriod( index );
             }
         });
     }

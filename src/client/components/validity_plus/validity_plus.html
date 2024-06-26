@@ -1,0 +1,18 @@
+<template name="validity_plus">
+    <div class="validity-plus">
+
+        <div class="dropdown">
+            <button class="{{ classes }}" id="validity-plus-btn" data-bs-toggle="{{ btnToggle }}" type="button" role="tab" {{ btnDisabled }} aria-expanded="false" data-target="#validity-plus-dropdown-menu">
+                <span class="fa-solid fa-fw fa-plus"></span>
+            </button>
+            {{#if haveHoles }}
+                <ul class="dropdown-menu" id="validity-plus-dropdown-menu">
+                    {{#each h in holes }}
+                        <li><a class="dropdown-item" href="#" data-validities-plus="{{ itemData h }}">{{ itemLabel h }}</a></li>
+                    {{/each}}
+                </ul>
+            {{/if}}
+        </div>
+
+    </div>
+</template>

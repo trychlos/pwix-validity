@@ -1,0 +1,14 @@
+<template name="validity_select">
+    <div class="validity-select">
+
+        <select class="form-select js-validity" {{ selectDisabled }}>
+            {{#unless hasCurrent }}
+                <option value="" selected disabled>{{ i18n key="select.def_label" }}</option>
+            {{/unless}}
+            {{#each it in itemsList }}
+                <option value="{{ it }}" {{ itSelected it }}>{{ itLabel it }}</option>
+            {{/each}}
+        </select>
+
+    </div>
+</template>

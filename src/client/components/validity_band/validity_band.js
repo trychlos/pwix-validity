@@ -1,5 +1,5 @@
 /*
- * pwix:validity/src/client/components/validities_band/validities_band.js
+ * pwix:validity/src/client/components/validity_band/validity_band.js
  *
  * Validities horizontal band.
  *
@@ -9,22 +9,22 @@
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import './validities_band.html';
+import './validity_band.html';
 
-Template.validities_band.onCreated( function(){
+Template.validity_band.onCreated( function(){
     const self = this;
 });
 
-Template.validities_band.onRendered( function(){
+Template.validity_band.onRendered( function(){
     const self = this;
-    const appDate = Meteor.APP.Date;
+    const appDate = Validity.Date;
 
     // have a colored band for each period from infinite to infinite
     //  leaving free periods without color
     self.autorun(() => {
         const periods = Template.currentData().periods;
 
-        self.$( '.c-validities-band .band' ).empty();
+        self.$( '.validity-band .band' ).empty();
         let $div;
 
         if( periods.length ){
@@ -84,14 +84,14 @@ Template.validities_band.onRendered( function(){
                         }
                         break;
                 }
-                self.$( '.c-validities-band .band' ).append( $div );
+                self.$( '.validity-band .band' ).append( $div );
             }
 
         // no free period at all - have only one full used period
         } else {
             $div = $( '<div></div' ).css({ width: '100%' }).addClass( 'used' );
             $div.attr( 'title', pwixI18n.label( I18N, 'validities.band.used_fromto_infinite' ));
-            self.$( '.c-validities-band .band' ).append( $div );
+            self.$( '.validity-band .band' ).append( $div );
         }
     });
 });
