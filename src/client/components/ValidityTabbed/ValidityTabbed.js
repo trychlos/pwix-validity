@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/ValidityTabbed/ValidityTabbed.js
+ * pwix:validity/src/client/components/ValidityTabbed/ValidityTabbed.js
  *
  * Validities tabs manager: run the specified panel inside of our own tabbed component.
  * We manage here one tab per validity records, plus a 'availability' tab which shows available validity periods, plus an 'add' button.
@@ -26,7 +26,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 //import '/imports/client/components/date_input/date_input.js';
-//import '/imports/client/components/validities_band/validities_band.js';
+import '../validities_band/validities_band.js';
 //import '/imports/client/components/validities_fieldset/validities_fieldset.js';
 //import '/imports/client/components/validities_panel/validities_panel.js';
 //import '/imports/client/components/validities_plus/validities_plus.js';
