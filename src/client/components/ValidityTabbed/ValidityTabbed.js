@@ -10,7 +10,7 @@
  * When needed, validity tabs periods can be identified through the tab identifier allocated and advertized by the Tabbed component.
  *
  * Parms:
- * - entity: the to-be-edited item entity, as a ReactiveVar, including a DYN.records array - empty if new
+ * - entity: the to-be-edited item entity, as a ReactiveVar, including a DYN.records array of ReactiveVar's - empty if new
  * - template: the to-be-included Blaze template name
  * - startField: name of the field which contains the starting effect date, defaulting to 'effectStart'
  * - endField: name of the field which contains the ending effect date, defaulting to 'effectEnd'
@@ -25,16 +25,17 @@ import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-//import '/imports/client/components/date_input/date_input.js';
+import '../date_input/date_input.js';
 import '../validity_band/validity_band.js';
-//import '/imports/client/components/validities_fieldset/validities_fieldset.js';
 import '../validity_panel/validity_panel.js';
 import '../validity_plus/validity_plus.js';
+import '../ValidityFieldset/ValidityFieldset.js';
 
 import './ValidityTabbed.html';
 
 Template.ValidityTabbed.onCreated( function(){
     const self = this;
+    console.debug( this );
 
     self.PCK = {
         addons: [
@@ -63,7 +64,7 @@ Template.ValidityTabbed.onCreated( function(){
             for( let i=0 ; i<entity.DYN.records.length ; ++i ){
                 const record = entity.DYN.records[i];
                 tabs.push({
-                    navLabel: self.PCK.itemLabel( record, i ),
+                    navLabel: self.PCK.itemLabel( record.get(), i ),
                     paneTemplate: Template.currentData().template,
                     paneData: {
                         ...Template.currentData(),
@@ -109,7 +110,7 @@ Template.ValidityTabbed.onCreated( function(){
         // provides the translated label associated with this tab
         itemLabel( it, index ){
             let res = '';
-            if( !Validity.Date.isValid( it[thiself.PCKsAPP.startField] ) && !Validity.Date.isValid( it[self.PCK.endField] )){
+            if( !Validity.Date.isValid( it[self.PCK.startField] ) && !Validity.Date.isValid( it[self.PCK.endField] )){
                 res = pwixI18n.label( I18N, 'tab.full' );
             } else if( Validity.Date.isValid( it[self.PCK.startField] )){
                 res = pwixI18n.label( I18N, 'tab.from', Validity.Date.toString( it[self.PCK.startField] ));
@@ -190,9 +191,8 @@ Template.ValidityTabbed.onCreated( function(){
         },
 
         // build a dropdown menu depending of the current item
-        //  we are already sure that we have more than one
         tabDropdown( it, index ){
-            const length = Template.currentData.entity.get().DYN.records.length;
+            const length = Template.currentData().entity.get().DYN.records.length;
             let res = '';
             if( length > 1 ){
                 res += '<li><a class="dropdown-item js-remove" href="#">'+pwixI18n.label( I18N, 'tab.remove' )+'</a></li>'
@@ -225,14 +225,14 @@ Template.ValidityTabbed.onCreated( function(){
     self.PCK.startField = Template.currentData().startField || 'effectStart';
     self.PCK.endField = Template.currentData().endField || 'effectEnd';
 
-    // track the validity periods from the 'entity.DYN.records' array
+    // track the validity periods from the 'entity.DYN.records' array of ReactiveVar's
     self.autorun(() => {
         let periods = [];
         const entityRv = Template.currentData().entity;
         check( entityRv, ReactiveVar );
         console.debug( entityRv );
         entityRv.get().DYN.records.forEach(( it ) => {
-            periods.push({ start: it[self.PCK.startField], end: it[self.PCK.endField] });
+            periods.push({ start: it.get()[self.PCK.startField], end: it.get()[self.PCK.endField] });
         });
         self.PCK.periods.set( periods );
     });
@@ -241,7 +241,7 @@ Template.ValidityTabbed.onCreated( function(){
     self.autorun(() => {
         let validities = [];
         self.PCK.periods.get().forEach(( it ) => {
-            push({ start: it.start, end: it.end });
+            validities.push({ start: it.start, end: it.end });
         });
         const holes = Validity.holes( validities, {
             start: 'start',
@@ -276,7 +276,7 @@ Template.ValidityTabbed.onRendered( function(){
     }
 
     // publish the edited reactive var (once)
-    self.$( '.ValidityTabbed' ).trigger( 'iz-edited-rv', { edited: Template.currentData().entity });
+    self.$( '.ValidityTabbed' ).trigger( 'validity-edited-rv', { edited: Template.currentData().entity });
 
     // setup default active tab to the closest record
     const res = Validity.closest( Template.currentData().entity.get());
