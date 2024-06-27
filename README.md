@@ -34,11 +34,67 @@ The exported `Validity` global object provides following items:
 
 #### Functions
 
-##### `Validity.configure()`
+##### `Validity.configure( o<Object> )`
 
-    See [below](#configuration).
+See [below](#configuration)
 
-#### Classes
+##### `Validity.entitiesFieldDef()`
+
+Returns an object suitable for a `Field.Def` definition of the entities collection, as an empty definition as `pwix:validity` doesn't add anything to it.
+
+This function should be called from common code, but you can just omit it as it does nothing, and is only defined for completeness.
+
+##### `Validity.recordsFieldDef()`
+
+Returns an array suitable for a `Field.Set` extension, as the following definition:
+
+```js
+```
+
+This function MUST be called from common code.
+
+##### `Validity.i18n.namespace()`
+
+Returns the i18n namespace used by the package. Used to add translations at runtime.
+
+Available both on the client and the server.
+
+### Blaze components
+
+#### `ValidityTabbed`
+
+A `Tabbed`-derived component which let the application manage validity records of an entity. Each record is displayed in its own pane, whose name is built from start and end effect dates.
+
+An additional tab is displayed to show available periods (if any).
+
+The expected data context is:
+
+- `entity`: a ReactiveVar which must contain the edited entity document.
+
+    It is expected that the document contains a `DYN` object, with a `records` key. The `DYN.records` value is an array of ReactiveVar's which contains a validity record.
+
+- `template`: the name of the Blaze template to be used for records panes.
+
+- `startField`: the name of the field (of the record documents) which contains the starting effect date, defaulting to 'effectStart'
+
+- `endField`: the name of the field (of the record documents) which contains the ending effect date, defaulting to 'effectEnd'
+
+- `withValidities`: whether we want deal with validity records, defaulting to `true`.
+
+#### `ValidityFieldset`
+
+An additional component to be included by the Blaze template which manages the records documents (the `template` above) to let the user enter start and end effect dates.
+
+The expected data context is:
+
+- `startDate`: the starting effect date (as a Date), or null
+
+- `endDate`: the ending effect date (as a Date), or null.
+
+Even if this component embeds itself a `DateInput` advanced date input component, and so even if you could react on `date-input-data` event, the `ValidityFieldset` components takes care of that in your place, and triggers `validity-fieldset-data` events, with data as an `Object` with following keys:
+
+- `validity-start`, a valid `Date`, or null
+- `validity-end`, a valid `Date`, or null.
 
 ## Configuration
 
