@@ -59,6 +59,8 @@ Template.DateInput.onRendered( function(){
     const selector = '.DateInput#'+self.APP.id+' input';
     const defaultValue = Template.currentData().defaultValue || null;
     UIU.DOM.waitFor( selector )
+    /*
+    CoreApp.DOM.waitFor( selector )
         .then(( element ) => {
             self.$( selector ).datepicker({
                 dateFormat: self.APP.jqInput,
@@ -76,6 +78,7 @@ Template.DateInput.onRendered( function(){
             });
             self.APP.initialized.set( true );
         });
+        */
 
     // setup the initial value
     self.autorun(() => {
