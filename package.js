@@ -33,8 +33,9 @@ function configure( api ){
     _use( 'ecmascript' );
     _use( 'less@4.0.0', 'client' );
     _use( 'pwix:bootbox@1.5.0' );
+    _use( 'pwix:date@1.0.0' );
     _use( 'pwix:date-input@1.0.0' );
-    _use( 'pwix:forms@1.0.0' );
+    _use( 'pwix:forms@1.0.0-rc' );
     _use( 'pwix:i18n@1.5.0' );
     _use( 'pwix:modal@2.0.0' );
     _use( 'pwix:tabbed@1.0.0' );

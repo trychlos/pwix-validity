@@ -6,6 +6,7 @@
  * - endDate: the ending effect date (as a Date), or null
  */
 
+import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveDict } from 'meteor/reactive-dict';
 
@@ -30,7 +31,7 @@ Template.ValidityFieldset.helpers({
         let def = this.endDate;
         if( !def ){
             def = new Date();
-            if( Validity.Date.compare( def, this.startDate ) < 0 ){
+            if( DateJs.compare( def, this.startDate ) < 0 ){
                 def = this.startDate;
             }
         }
@@ -46,7 +47,7 @@ Template.ValidityFieldset.helpers({
         let def = this.startDate;
         if( !def ){
             def = new Date();
-            if( Validity.Date.compare( def, this.endDate ) > 0 ){
+            if( DateJs.compare( def, this.endDate ) > 0 ){
                 def = this.endDate;
             }
         }

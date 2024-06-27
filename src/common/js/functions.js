@@ -9,6 +9,7 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
+import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 /*
@@ -67,7 +68,7 @@ Validity._compare_typed_values = function( a, b, opts ){
             return a.length < b.length ? -1 : ( a.length > b.length ? +1 : 0 );
         }
         if( opts.type === 'Date' ){
-            return Validity.Date.compare( a, b );
+            return DateJs.compare( a, b );
         }
     }
 };
@@ -79,19 +80,19 @@ Validity._compare_typed_values = function( a, b, opts ){
  * @returns {Array} an array of two dates which are the intersection of a and b, each date may being null
  */
 Validity._intervals_overlap = function( a, b ){
-    const startDate1 = Validity.Date.sanitize( a[0] ) || new Date( Validity.Date.infinite.start ); // Represents the beginning of time
-    const endDate1 = Validity.Date.sanitize( a[1] ) || new Date( Validity.Date.infinite.end );   // Represents the end of time
-    const startDate2 = Validity.Date.sanitize( b[0] ) || new Date( Validity.Date.infinite.start );
-    const endDate2 = Validity.Date.sanitize( b[1] ) || new Date( Validity.Date.infinite.end );
+    const startDate1 = DateJs.sanitize( a[0] ) || new Date( DateJs.infinite.start ); // Represents the beginning of time
+    const endDate1 = DateJs.sanitize( a[1] ) || new Date( DateJs.infinite.end );   // Represents the end of time
+    const startDate2 = DateJs.sanitize( b[0] ) || new Date( DateJs.infinite.start );
+    const endDate2 = DateJs.sanitize( b[1] ) || new Date( DateJs.infinite.end );
 
     let latestStartDate = new Date( Math.max( startDate1, startDate2 ));
     let earliestEndDate = new Date( Math.min( endDate1, endDate2 ));
 
     if( latestStartDate <= earliestEndDate ){
-        if(  Validity.Date.isInfinite( latestStartDate )){
+        if(  DateJs.isInfinite( latestStartDate )){
             latestStartDate = null;
         }
-        if(  Validity.Date.isInfinite( earliestEndDate )){
+        if(  DateJs.isInfinite( earliestEndDate )){
             earliestEndDate = null;
         }
         return [ latestStartDate, earliestEndDate ];
@@ -106,10 +107,10 @@ Validity._intervals_overlap = function( a, b ){
  * @returns {Boolean} true if the periods are the same
  */
 Validity._is_same_period = function( a, b, opts ){
-    const startDate1 = Validity.Date.sanitizeToMs( a[0], Validity.Date.infinite.start ); // Represents the beginning of time
-    const endDate1 = Validity.Date.sanitizeToMs( a[1], Validity.Date.infinite.end );   // Represents the end of time
-    const startDate2 = Validity.Date.sanitizeToMs( b[0], Validity.Date.infinite.start );
-    const endDate2 = Validity.Date.sanitizeToMs( b[1], Validity.Date.infinite.end );
+    const startDate1 = DateJs.sanitizeToMs( a[0], DateJs.infinite.start ); // Represents the beginning of time
+    const endDate1 = DateJs.sanitizeToMs( a[1], DateJs.infinite.end );   // Represents the end of time
+    const startDate2 = DateJs.sanitizeToMs( b[0], DateJs.infinite.start );
+    const endDate2 = DateJs.sanitizeToMs( b[1], DateJs.infinite.end );
     const same = startDate1 === startDate2 && endDate1 === endDate2;
     //console.debug( 'same_period', a, b, startDate1, endDate1, startDate2, endDate2, same );
     return same;
@@ -197,7 +198,7 @@ Validity.atDate = function( array, opts={} ){
     const dateTime = date.getTime();    // the target date as epoch
 
     // first sort the provided array by ascending start effect date
-    array.sort(( a, b ) => { return Validity.Date.compare( a[startField], b[startField ] ); });
+    array.sort(( a, b ) => { return DateJs.compare( a[startField], b[startField ] ); });
 
     // then explore the array until finding a start effect date after the searched date
     //  and take the previous one
@@ -252,7 +253,7 @@ Validity.checkEnd = function( array, item, opts={} ){
     const endField = opts.end || 'effectEnd';
     let res = null;
 
-    if( item[endField] && !Validity.Date.isValid( item[endField] )){
+    if( item[endField] && !DateJs.isValid( item[endField] )){
         console.warn( 'invalid date item[endField]', item[endField] );
         res = pwixI18n.label( I18N, 'check.invalid_date' );
 
@@ -282,7 +283,7 @@ Validity.checkStart = function( array, item, opts={} ){
     const endField = opts.end || 'effectEnd';
     let res = null;
 
-    if( item[startField] && !Validity.Date.isValid( item[startField] )){
+    if( item[startField] && !DateJs.isValid( item[startField] )){
         console.error( 'invalid date item[startField]', item[startField] );
         res = pwixI18n.label( I18N, 'check.invalid_date' );
 
@@ -317,7 +318,7 @@ Validity.closest = function( entity, opts={} ){
     const dateTime = date.getTime();    // the target date as epoch
 
     // first sort the provided array by ascending start effect date
-    array.sort(( a, b ) => { return Validity.Date.compare( a[startField], b[startField ] ); });
+    array.sort(( a, b ) => { return DateJs.compare( a[startField], b[startField ] ); });
 
     // then explore the array until finding a start effect date after the searched date
     //  and take the previous one
@@ -380,7 +381,7 @@ Validity.group = function( array, opts={} ){
 
     // sort each item array by ascending start effect date
     Object.keys( hash ).every(( id ) => {
-        hash[id].sort(( a, b ) => { return Validity.Date.compare( a[startField], b[startField ] ); });
+        hash[id].sort(( a, b ) => { return DateJs.compare( a[startField], b[startField ] ); });
         return true;
     });
 
@@ -415,7 +416,7 @@ Validity.holes = function( array, opts={} ){
     let holes = [];
 
     // first sort the provided array by ascending start effect date
-    array.sort(( a, b ) => { return Validity.Date.compare( a[startField], b[startField ] ); });
+    array.sort(( a, b ) => { return DateJs.compare( a[startField], b[startField ] ); });
 
     //  last item should have effectEnd unset
     let lastEnd = null;
@@ -424,12 +425,12 @@ Validity.holes = function( array, opts={} ){
         const it = array[i];
         // if we have a start date, then found a hole if last end date was lesser than start-1
         if( it[startField] ){
-            let startBefore = Validity.Date.compute( it[startField], -1 );
-            if( !lastEnd || Validity.Date.toString( lastEnd ) < Validity.Date.toString( startBefore )){
+            let startBefore = DateJs.compute( it[startField], -1 );
+            if( !lastEnd || DateJs.toString( lastEnd ) < DateJs.toString( startBefore )){
                 let o = {};
                 o.end = startBefore;
                 if( lastEnd ){
-                    o.start = Validity.Date.compute( lastEnd, +1 );
+                    o.start = DateJs.compute( lastEnd, +1 );
                 }
                 holes.push( o );
             }
@@ -442,7 +443,7 @@ Validity.holes = function( array, opts={} ){
         if( i === array.length-1 ){
             if( it[endField] ){
                 let o = {};
-                o.start = Validity.Date.compute( it[endField], +1 );
+                o.start = DateJs.compute( it[endField], +1 );
                 holes.push( o );
             }
         }
@@ -458,8 +459,8 @@ Validity.holes = function( array, opts={} ){
  * @returns {Boolean} whether the period is valid
  */
 Validity.isValidPeriod = function( start, end ){
-    const startValue = Validity.Date.sanitize( start ) || new Date( Validity.Date.infinite.start );
-    const endValue = Validity.Date.sanitize( end ) ||  new Date( Validity.Date.infinite.end );
+    const startValue = DateJs.sanitize( start ) || new Date( DateJs.infinite.start );
+    const endValue = DateJs.sanitize( end ) ||  new Date( DateJs.infinite.end );
     return startValue <= endValue;
 };
 
@@ -481,16 +482,16 @@ Validity.newRecord = function( entity, period, opts={} ){
     const startField = opts.start || 'effectStart';
     const endField = opts.end || 'effectEnd';
     let res = null;
-    //console.debug( 'period', period, Validity.Date.isValid( period.start ), Validity.Date.isValid( period.end ));
+    //console.debug( 'period', period, DateJs.isValid( period.start ), DateJs.isValid( period.end ));
 
     // search for the previous record (or the next one if first)
     let found = -1;
-    if( !Validity.Date.isValid( period.start )){
+    if( !DateJs.isValid( period.start )){
         found = 0;
     } else {
         for( let i=0 ; i<array.length ; ++i ){
             const it = array[i];
-            if( Validity.Date.compare( period.start, it[startField] ) === +1 ){
+            if( DateJs.compare( period.start, it[startField] ) === +1 ){
                 found = i-1;
                 break;
             }
@@ -510,11 +511,11 @@ Validity.newRecord = function( entity, period, opts={} ){
         delete record.updatedAt;
         delete record.updatedBy;
         // this validity atributes
-        record[startField] = Validity.Date.sanitize( period.start );
-        record[endField] = Validity.Date.sanitize( period.end );
+        record[startField] = DateJs.sanitize( period.start );
+        record[endField] = DateJs.sanitize( period.end );
         record.NEWRECORD = true;
         res.push( record );
-        res.sort(( a, b ) => { return Validity.Date.compare( a[startField], b[startField ] ); });
+        res.sort(( a, b ) => { return DateJs.compare( a[startField], b[startField ] ); });
     } else {
         console.warn( 'unable to find a reference record', period, array, opts );
     }
@@ -545,7 +546,7 @@ Validity.newRecord = function( entity, period, opts={} ){
     */
 
     // just a shortcut to our Date object
-    //Date: Validity.Date,
+    //Date: DateJs,
 
     /*
      * @summary Compare the validity of two records, saying how they compare
@@ -595,7 +596,7 @@ Validity.newRecord = function( entity, period, opts={} ){
      * @param {Object} opts options
      *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
      *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
-     *  - date: the searched validity UTC date, as a Date object, defaulting to Validity.Date.UTC()
+     *  - date: the searched validity UTC date, as a Date object, defaulting to DateJs.UTC()
      * @returns {Object} the current record at the date
      */
     /*
@@ -625,7 +626,7 @@ Validity.newRecord = function( entity, period, opts={} ){
      * @param {Object} opts options
      *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
      *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
-     *  - date: the searched validity UTC date, as a Date object, defaulting to Validity.Date.UTC()
+     *  - date: the searched validity UTC date, as a Date object, defaulting to DateJs.UTC()
      * @returns {Integer} -1 if the record is in the past of the specified date
      *                     0 if the specified date in inside of the record
      *                    +1 if the record is in the future of the specified date
