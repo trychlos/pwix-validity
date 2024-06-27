@@ -119,7 +119,7 @@ Template.ValidityTabbed.onCreated( function(){
             }
             // add a dropdown menu for all periods
             return ''
-                +'<div class="d-flex justify-content-between align-items-center">'
+                +'<div class="d-flex justify-content-between align-items-center validity-item-label">'
                 +res
                 +'<div class="dropdown">'
                 +'  <a class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></a>'
