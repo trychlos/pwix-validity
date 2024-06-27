@@ -59,7 +59,7 @@ Template.ValidityFieldset.helpers({
 });
 
 Template.ValidityFieldset.events({
-    // date entered in date_input component
+    // date entered in DateInput component
     'date-input-data .ValidityFieldset'( event, instance, data ){
         console.debug( event.type, data );
         instance.APP.dates.set( data.name, data.date );
