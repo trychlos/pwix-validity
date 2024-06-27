@@ -25,7 +25,7 @@ Template.ValidityFieldset.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // parameters for date_input on end date
+    // parameters for DateInput on end date
     parmsEndDate(){
         let def = this.endDate;
         if( !def ){
@@ -41,7 +41,7 @@ Template.ValidityFieldset.helpers({
         };
     },
 
-    // parameters for date_input on start date
+    // parameters for DateInput on start date
     parmsStartDate(){
         let def = this.startDate;
         if( !def ){
@@ -59,7 +59,7 @@ Template.ValidityFieldset.helpers({
 });
 
 Template.ValidityFieldset.events({
-    // date entered in date_input component
+    // date entered in DateInput component
     'date-input-data .ValidityFieldset'( event, instance, data ){
         console.debug( event.type, data );
         instance.APP.dates.set( data.name, data.date );

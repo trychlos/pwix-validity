@@ -25,7 +25,7 @@ import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import '../date_input/date_input.js';
+import '../DateInput/DateInput.js';
 import '../validity_band/validity_band.js';
 import '../validity_panel/validity_panel.js';
 import '../validity_plus/validity_plus.js';
