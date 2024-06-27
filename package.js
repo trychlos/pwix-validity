@@ -43,6 +43,7 @@ function configure( api ){
     _use( 'reactive-var' );
     _use( 'tmeasday:check-npm-versions@1.0.2 || 2.0.0-beta.0', 'server' );
     _use( 'tracker' );
+    api.addFiles( 'src/client/components/DateInput/DateInput.js', 'client' );
     api.addFiles( 'src/client/components/ValidityFieldset/ValidityFieldset.js', 'client' );
     api.addFiles( 'src/client/components/ValidityTabbed/ValidityTabbed.js', 'client' );
 }
