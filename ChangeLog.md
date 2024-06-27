@@ -7,6 +7,7 @@
     Release date:
 
     - Improve README
+    - Add french translation
 
 ### 1.0.0
 
