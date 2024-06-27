@@ -60,9 +60,9 @@ Template.ValidityFieldset.helpers({
 
 Template.ValidityFieldset.events({
     // date entered in date_input component
-    'date-input-data .validity-fieldset'( event, instance, data ){
+    'date-input-data .ValidityFieldset'( event, instance, data ){
         console.debug( event.type, data );
         instance.APP.dates.set( data.name, data.date );
-        instance.$( '.validity-fieldset' ).trigger( 'validities-data', instance.APP.dates.all());
+        instance.$( '.ValidityFieldset' ).trigger( 'validities-data', instance.APP.dates.all());
     }
 });
