@@ -14,7 +14,7 @@ import './ValidityFieldset.html';
 Template.ValidityFieldset.onCreated( function(){
     const self = this;
 
-    self.APP = {
+    self.PCK = {
         dates: new ReactiveDict()
     };
 });
@@ -35,7 +35,7 @@ Template.ValidityFieldset.helpers({
             }
         }
         return {
-            name: 'validities-end',
+            name: 'validity-end',
             value: this.endDate,
             defaultValue: def
         };
@@ -51,7 +51,7 @@ Template.ValidityFieldset.helpers({
             }
         }
         return {
-            name: 'validities-start',
+            name: 'validity-start',
             value: this.startDate,
             defaultValue: def
         };
@@ -61,8 +61,8 @@ Template.ValidityFieldset.helpers({
 Template.ValidityFieldset.events({
     // date entered in DateInput component
     'date-input-data .ValidityFieldset'( event, instance, data ){
-        console.debug( event.type, data );
-        instance.APP.dates.set( data.name, data.date );
-        instance.$( '.ValidityFieldset' ).trigger( 'validities-data', instance.APP.dates.all());
+        //console.debug( event.type, data );
+        instance.PCK.dates.set( data.name, data.date );
+        instance.$( '.ValidityFieldset' ).trigger( 'validity-fieldset-data', instance.PCK.dates.all());
     }
 });
