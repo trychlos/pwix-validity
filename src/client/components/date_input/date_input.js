@@ -21,6 +21,7 @@
 
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Random } from 'meteor/random';
+import { UIU } from 'meteor/pwix:ui-utils';
 
 import './date_input.html';
 
@@ -57,8 +58,7 @@ Template.date_input.onRendered( function(){
     // initialize the datepicker DOM element
     const selector = '.c-date-input#'+self.APP.id+' input';
     const defaultValue = Template.currentData().defaultValue || null;
-    /*
-    CoreApp.DOM.waitFor( selector )
+    UIU.DOM.waitFor( selector )
         .then(( element ) => {
             self.$( selector ).datepicker({
                 dateFormat: self.APP.jqInput,
@@ -76,7 +76,6 @@ Template.date_input.onRendered( function(){
             });
             self.APP.initialized.set( true );
         });
-        */
 
     // setup the initial value
     self.autorun(() => {
