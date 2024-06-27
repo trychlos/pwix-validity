@@ -9,5 +9,7 @@ import './i18n.js';
 import './trace.js';
 //
 import './date.js';
-import './fieldset.js';
+import './entities-fieldset.js';
+import './records-fieldset.js';
+//
 import './functions.js';

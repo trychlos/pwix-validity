@@ -2,12 +2,13 @@
 
 ## ChangeLog
 
-### 1.0.1-rc
+### 1.1.0-rc
 
     Release date:
 
     - Improve README
     - Add french translation
+    - Define Validity.entitiesFieldDef() and Validity.recordsFieldDef() new functions, bumping minor candidate version number
 
 ### 1.0.0
 
