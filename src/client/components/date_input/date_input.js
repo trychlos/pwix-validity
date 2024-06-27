@@ -19,7 +19,6 @@
  * Triggers a 'date-input-data' event with the date as a Date (or null if invalid).
  */
 
-import { CoreApp } from 'meteor/pwix:core-app';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Random } from 'meteor/random';
 
@@ -58,6 +57,7 @@ Template.date_input.onRendered( function(){
     // initialize the datepicker DOM element
     const selector = '.c-date-input#'+self.APP.id+' input';
     const defaultValue = Template.currentData().defaultValue || null;
+    /*
     CoreApp.DOM.waitFor( selector )
         .then(( element ) => {
             self.$( selector ).datepicker({
@@ -76,6 +76,7 @@ Template.date_input.onRendered( function(){
             });
             self.APP.initialized.set( true );
         });
+        */
 
     // setup the initial value
     self.autorun(() => {
