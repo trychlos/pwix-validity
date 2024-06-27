@@ -11,7 +11,8 @@
 |   Id | Date       | Description and comment(s) |
 | ---: | :---       | :---                       |
 |    1 | 2024- 6-27 | let the recordFieldDef() default be overriden by the caller |
-|    2 |  |  |
+|    2 | 2024- 6-27 | let field names (effectStart, effectEnd) be configured |
+|    3 |  |  |
 
 ---
 ## Done
