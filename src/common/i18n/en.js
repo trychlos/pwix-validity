@@ -21,6 +21,11 @@ Validity.i18n = {
                 invalid_period: 'Starting and ending dates do not make a valid interval',
                 start_incompatible: 'Starting date is incompatible with other validity periods'
             },
+            help: {
+                end_line: 'The ending date of the validity period (to infinite if nul)',
+                entity_line: 'The entity identifier',
+                start_line: 'The starting date of the validity period (from infinite if nul)'
+            },
             panel: {
                 confirm_mergeleft: 'Merging with previous period means keeping these current data, consolidating the validity periods. Are you sure ?',
                 confirm_mergeright: 'Merging with next period means keeping these current data, consolidating the validity periods. Are you sure ?',
