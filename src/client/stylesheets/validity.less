@@ -89,10 +89,19 @@
     }
 }
 
-.ValidityTabbed .tab-pane {
-    // have a special display for fields which are not equals between different validity records
-    .val-differents {
-        color: gray;
-        font-style: italic;
+.ValidityTabbed {
+    .tab-pane {
+        // have a special display for fields which are not equals between different validity records
+        .val-differents {
+            color: gray;
+            font-style: italic;
+        }
+    }
+    .nav-tabs {
+        .validity-item-label {
+            .dropdown {
+                padding-left: 0.5em;
+            }
+        }
     }
 }

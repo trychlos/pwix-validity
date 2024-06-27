@@ -2,6 +2,7 @@
  * /imports/organization/contents/validity_panel/validity_panel.js
  *
  * Validities panel.
+ * It shows the available validity periods.
  *
  * Parms:
  * - holes: a ReactiveVar which holds the array of available validity periods
