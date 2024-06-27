@@ -13,6 +13,7 @@
  *      argument will be the selection free validity period
  */
 
+import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import './validity_plus.html';
@@ -52,12 +53,12 @@ Template.validity_plus.helpers({
     //  a validity period cannot be from infinite to infinite
     itemLabel( p ){
         let res = '';
-        if( !Validity.Date.isValid( p.start )){
-            res =pwixI18n.label( I18N, 'validities.plus.upto', Validity.Date.toString( p.end ));
-        } else if( !Validity.Date.isValid( p.end )){
-            res = pwixI18n.label( I18N, 'validities.plus.from', Validity.Date.toString( p.start ));
+        if( !DateJs.isValid( p.start )){
+            res =pwixI18n.label( I18N, 'validities.plus.upto', DateJs.toString( p.end ));
+        } else if( !DateJs.isValid( p.end )){
+            res = pwixI18n.label( I18N, 'validities.plus.from', DateJs.toString( p.start ));
         } else {
-            res = pwixI18n.label( I18N, 'validities.plus.fromto', Validity.Date.toString( p.start ), Validity.Date.toString( p.end ));
+            res = pwixI18n.label( I18N, 'validities.plus.fromto', DateJs.toString( p.start ), DateJs.toString( p.end ));
         }
         return res;
     }

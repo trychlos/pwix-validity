@@ -21,6 +21,7 @@ import _ from 'lodash';
 const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
 import { Bootbox } from 'meteor/pwix:bootbox';
+import { DateJs } from 'meteor/pwix:date';
 import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
@@ -109,12 +110,12 @@ Template.ValidityTabbed.onCreated( function(){
         // provides the translated label associated with this tab
         itemLabel( it, index ){
             let res = '';
-            if( !Validity.Date.isValid( it[self.PCK.startField] ) && !Validity.Date.isValid( it[self.PCK.endField] )){
+            if( !DateJs.isValid( it[self.PCK.startField] ) && !DateJs.isValid( it[self.PCK.endField] )){
                 res = pwixI18n.label( I18N, 'tab.full' );
-            } else if( Validity.Date.isValid( it[self.PCK.startField] )){
-                res = pwixI18n.label( I18N, 'tab.from', Validity.Date.toString( it[self.PCK.startField] ));
+            } else if( DateJs.isValid( it[self.PCK.startField] )){
+                res = pwixI18n.label( I18N, 'tab.from', DateJs.toString( it[self.PCK.startField] ));
             } else {
-                res = pwixI18n.label( I18N, 'tab.to', Validity.Date.toString( it[self.PCK.endField] ));
+                res = pwixI18n.label( I18N, 'tab.to', DateJs.toString( it[self.PCK.endField] ));
             }
             // add a dropdown menu for all periods
             return ''

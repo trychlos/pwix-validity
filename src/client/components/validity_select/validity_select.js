@@ -9,6 +9,7 @@
  *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
  */
 
+import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
@@ -35,20 +36,19 @@ Template.validity_select.onCreated( function(){
     // build the validity periods labels
     self.autorun(() => {
         const group = self.APP.group.get();
-        const appDate = Validity.Date;
         let list = {};
         if( group ){
             const closest = Meteor.APP.OrganizationContext.currentClosest();
             group.items.every(( it ) => {
                 let label = '';
-                if( appDate.isValid( it[self.APP.startField] )){
-                    if( appDate.isValid( it[self.APP.endField] )){
-                        label = pwixI18n.label( I18N, 'validities.select.fromto', appDate.toString( it[self.APP.startField] ), appDate.toString( it[self.APP.endField] ));
+                if( DateJs.isValid( it[self.APP.startField] )){
+                    if( DateJs.isValid( it[self.APP.endField] )){
+                        label = pwixI18n.label( I18N, 'validities.select.fromto', DateJs.toString( it[self.APP.startField] ), DateJs.toString( it[self.APP.endField] ));
                     } else {
-                        label = pwixI18n.label( I18N, 'validities.select.from', appDate.toString( it[self.APP.startField] ));
+                        label = pwixI18n.label( I18N, 'validities.select.from', DateJs.toString( it[self.APP.startField] ));
                     }
-                } else if( appDate.isValid( it[self.APP.endField] )){
-                    label = pwixI18n.label( I18N, 'validities.select.to', appDate.toString( it[self.APP.endField] ));
+                } else if( DateJs.isValid( it[self.APP.endField] )){
+                    label = pwixI18n.label( I18N, 'validities.select.to', DateJs.toString( it[self.APP.endField] ));
                 } else {
                     label = pwixI18n.label( I18N, 'validities.select.full' );
                 }

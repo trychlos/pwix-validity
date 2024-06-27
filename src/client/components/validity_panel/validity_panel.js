@@ -9,6 +9,7 @@
  *      argument will be the selected free validity period
  */
 
+import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import './validity_panel.html';
@@ -28,12 +29,12 @@ Template.validity_panel.helpers({
     // title button
     btnTitle( p ){
         let res = '';
-        if( !Validity.Date.isValid( p.start )){
-            res =pwixI18n.label( I18N, 'panel.to', Validity.Date.toString( p.end ));
-        } else if( !Validity.Date.isValid( p.end )){
-            res = pwixI18n.label( I18N, 'panel.from', Validity.Date.toString( p.start ));
+        if( !DateJs.isValid( p.start )){
+            res =pwixI18n.label( I18N, 'panel.to', DateJs.toString( p.end ));
+        } else if( !DateJs.isValid( p.end )){
+            res = pwixI18n.label( I18N, 'panel.from', DateJs.toString( p.start ));
         } else {
-            res = pwixI18n.label( I18N, 'panel.fromto', Validity.Date.toString( p.start ), Validity.Date.toString( p.end ));
+            res = pwixI18n.label( I18N, 'panel.fromto', DateJs.toString( p.start ), DateJs.toString( p.end ));
         }
         return res;
     },
@@ -45,12 +46,12 @@ Template.validity_panel.helpers({
 
     // starting date
     holeFrom( p ){
-        return pwixI18n.label( I18N, 'panel.from', Validity.Date.isValid( p.start ) ? Validity.Date.toString( p.start ) : pwixI18n.label( I18N, 'panel.infinite' ));
+        return pwixI18n.label( I18N, 'panel.from', DateJs.isValid( p.start ) ? DateJs.toString( p.start ) : pwixI18n.label( I18N, 'panel.infinite' ));
     },
 
     // ending date
     holeTo( p ){
-        return pwixI18n.label( I18N, 'panel.to', Validity.Date.isValid( p.end ) ? Validity.Date.toString( p.end ) : pwixI18n.label( I18N, 'panel.infinite' ));
+        return pwixI18n.label( I18N, 'panel.to', DateJs.isValid( p.end ) ? DateJs.toString( p.end ) : pwixI18n.label( I18N, 'panel.infinite' ));
     },
 
     // holes
