@@ -9,6 +9,7 @@
     - Improve README
     - Add french translation
     - Define Validity.entitiesFieldDef() and Validity.recordsFieldDef() new functions, bumping minor candidate version number
+    - Define Validity.closestByRecords() new function
 
 ### 1.0.0
 
