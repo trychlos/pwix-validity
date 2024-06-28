@@ -14,7 +14,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 /*
  * @summary check an item vs a group of items to see if they are compatible
- * @param {Array} array the entity items array
+ * @param {Array} array the entity records array as ReactiveVar's
  * @param {Object} item the item to be tested, with fields { id, start, end }
  * @param {Object} opts options
  *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
@@ -29,11 +29,12 @@ Validity._check_against = function( array, item, opts={} ){
 
     //console.debug( 'item', item.start, item.end );
     array.every(( it ) => {
+        const record = it.get();
         //console.debug( 'it', it[startField], it[endField],
         //    'is_same_period', this._is_same_period( [ item.start, item.end ], [ it[startField], it[endField] ] ),
         //    'overlap', this._intervals_overlap( [ item.start, item.end ], [ it[startField], it[endField] ] ));
-        if( !this._is_same_period( [ item.start, item.end ], [ it[startField], it[endField] ] )){
-            const overlap = this._intervals_overlap( [ item.start, item.end ], [ it[startField], it[endField] ] );
+        if( !this._is_same_period( [ item.start, item.end ], [ record[startField], record[endField] ] )){
+            const overlap = this._intervals_overlap( [ item.start, item.end ], [ record[startField], record[endField] ] );
             ok &&= ( overlap === -1 );
         }
         return ok;
@@ -241,7 +242,7 @@ Validity.atDate = function( array, opts={} ){
  * @locus Anywhere
  * @summary Check whether the candidate ending effect date would be valid regarding the whole entity items
  *  It may notably be invalid if inside of an already allocated validity period.
- * @param {Array} array the array of available validity records for the entity
+ * @param {Array} array the array of available validity records as ReactiveVar's for the entity
  * @param {Object} item the item which holds the candidate effect date
  * @param {Object} opts options
  *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
@@ -271,7 +272,7 @@ Validity.checkEnd = function( array, item, opts={} ){
  * @locus Anywhere
  * @summary Check whether the candidate starting effect date would be valid regarding the whole entity items
  *  It may notably be invalid if inside of an already allocated validity period.
- * @param {Array} array the array of available validity records for the entity
+ * @param {Array} array the array of available validity records as ReactiveVar's for the entity
  * @param {Object} item the item which holds the candidate effect date
  * @param {Object} opts options
  *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
@@ -299,7 +300,7 @@ Validity.checkStart = function( array, item, opts={} ){
 
 /**
  * @locus Anywhere
- * @param {Object} entity the current entity published document, i.e. with its DYN.records array
+ * @param {Object} entity the current entity published document, i.e. with its DYN.records array of ReactiveVar's
  * @param {Object} opts options
  *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
  *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
@@ -312,19 +313,41 @@ Validity.closest = function( entity, opts={} ){
     let array = entity.DYN.records;
     assert( _.isArray( array ), 'expect DYN.records be an array' );
 
+    // transform the provided entity and its DYN.records array of ReactiveVar's to an simple array of record documents
+    let records = [];
+    for( let i=0 ; i<array.length ; ++i ){
+        records.push( array[i].get());
+    }
+    return this.closestByRecords( records, opts );
+};
+
+/**
+ * @locus Anywhere
+ * @param {Array} records the array of validity records documents (to be callable from server side) of an entity
+ * @param {Object} opts options
+ *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
+ *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
+ *  - date: the searched validity date, as a Date object, defaulting to current date
+ * @returns {Object} with following keys:
+ *  - record: the record whose validity period is the closest of the specified date (and, ideally, includes it)
+ *  - index: the corresponding index in the sorted array
+ */
+Validity.closestByRecords = function( records, opts={} ){
+    assert( _.isArray( records ), 'expect records be an array' );
+
     const startField = opts.start || 'effectStart';
     const endField = opts.end || 'effectEnd';
     const date = opts.date || new Date();
     const dateTime = date.getTime();    // the target date as epoch
 
     // first sort the provided array by ascending start effect date
-    array.sort(( a, b ) => { return DateJs.compare( a[startField], b[startField ] ); });
+    records.sort(( a, b ) => { return DateJs.compare( a[startField], b[startField ] ); });
 
     // then explore the array until finding a start effect date after the searched date
     //  and take the previous one
     let greater = -1;
-    for( let i=0 ; i<array.length ; ++i ){
-        const record = array[i];
+    for( let i=0 ; i<records.length ; ++i ){
+        const record = records[i];
         if( record[startField] ){
             const stime = record[startField].getTime();
             if( stime > dateTime ){
@@ -336,8 +359,8 @@ Validity.closest = function( entity, opts={} ){
     // at the end, either we have found a record which comes after, or not
     let found = -1;
     if( greater === -1 ){
-        if( array.length ){
-            found = array.length - 1;
+        if( records.length ){
+            found = records.length - 1;
         }
     } else if( greater > 0 ){
         found = greater - 1;
@@ -346,7 +369,7 @@ Validity.closest = function( entity, opts={} ){
     }
     // at last
     return {
-        record: array[found],
+        record: records[found],
         index: found
     };
 };
