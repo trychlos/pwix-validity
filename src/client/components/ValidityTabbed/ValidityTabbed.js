@@ -35,7 +35,7 @@ import './ValidityTabbed.html';
 
 Template.ValidityTabbed.onCreated( function(){
     const self = this;
-    console.debug( this );
+    //console.debug( this );
 
     self.PCK = {
         addons: [
@@ -230,7 +230,7 @@ Template.ValidityTabbed.onCreated( function(){
         let periods = [];
         const entityRv = Template.currentData().entity;
         check( entityRv, ReactiveVar );
-        console.debug( entityRv );
+        //console.debug( entityRv );
         entityRv.get().DYN.records.forEach(( it ) => {
             periods.push({ start: it.get()[self.PCK.startField], end: it.get()[self.PCK.endField] });
         });
