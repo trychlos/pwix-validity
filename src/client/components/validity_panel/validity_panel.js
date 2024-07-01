@@ -66,7 +66,7 @@ Template.validity_panel.helpers({
         return pwixI18n.label( I18N, arg.hash.key );
     },
 
-    // parms for validities_plus button
+    // parms for validity_plus button
     parmsValidities( p ){
         return {
             newPeriodCb: this.newPeriodCb || null,
