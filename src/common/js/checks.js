@@ -19,7 +19,7 @@ Validity.checks = {
     // if date is set, it must be valid - it is expected in yyyy-mm-dd format
     //  data comes from the edition panel, passed-in through the Forms.Checker instance
     async effectEnd( value, data, opts={} ){
-        this._assert_data_edited( 'Validity.checks.effectEnd()', data );
+        Validity.checks._assert_data_itemrv( 'Validity.checks.effectEnd()', data );
         const item = data.item.get();
         return Promise.resolve( null )
             .then(() => {
@@ -27,7 +27,7 @@ Validity.checks = {
                     item.effectEnd = value ? new Date( value ) : null;
                     data.item.set( item );
                 }
-                const msg = Validity.checkEnd( edited, data.item.get());
+                const msg = Validity.checkEnd( data.entity.get().DYN.records, data.item.get());
                 return msg ? new TM.TypedMessage({
                     type: opts.MessageType.C.ERROR,
                     message: msg
@@ -36,15 +36,15 @@ Validity.checks = {
     },
 
     async effectStart( value, data, opts={} ){
-        this._assert_data_edited( 'Validity.checks.effectStart()', data );
-        const edited = data.edited.get();
+        Validity.checks._assert_data_itemrv( 'Validity.checks.effectStart()', data );
+        const item = data.item.get();
         return Promise.resolve( null )
             .then(() => {
                 if( opts.update !== false ){
-                    data.item.effectStart = value ? new Date( value ) : null;
-                    data.edited.set( edited );
+                    item.effectStart = value ? new Date( value ) : null;
+                    data.item.set( item );
                 }
-                const msg = Meteor.APP.Validity.checkStart( edited, data.item.get());
+                const msg = Validity.checkStart( data.entity.get().DYN.records, data.item.get());
                 return msg ? new opts.TypedMessage({
                     type: opts.MessageType.C.ERROR,
                     message: msg

@@ -3,20 +3,20 @@
 
         {{#if haveHoles }}
             <div class="with">
-                <p class="text">{{{ i18n key="validities.panel.text_one" }}}</p>
+                <p class="text">{{{ i18n key="panel.text_one" }}}</p>
                 <table>
                     {{#each h in holes }}
                         <tr>
                             <td class="ui-w50">{{ holeFrom h }}</td>
                             <td class="ui-w50">{{ holeTo h }}</td>
-                            <td>{{> validities_plus (parmsValidities h) }}</td>
+                            <td>{{> validity_plus (parmsValidities h) }}</td>
                         </tr>
                     {{/each}}
                 </table>
             </div>
         {{else}}
             <div class="without">
-                <p class="text">{{{ i18n key="validities.panel.text_empty" }}}</p>
+                <p class="text">{{{ i18n key="panel.text_empty" }}}</p>
             </div>
         {{/if}}
 
