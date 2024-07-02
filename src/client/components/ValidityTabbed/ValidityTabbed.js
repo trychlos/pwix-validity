@@ -61,14 +61,14 @@ Template.ValidityTabbed.onCreated( function(){
         prevPeriods: [],
         buildTabs( entity ){
             let tabs = [];
+            let dataContext = Template.currentData();
             for( let i=0 ; i<entity.DYN.records.length ; ++i ){
                 const record = entity.DYN.records[i];
                 tabs.push({
                     navLabel: self.PCK.itemLabel( record.get(), i ),
                     paneTemplate: Template.currentData().template,
                     paneData: {
-                        ...Template.currentData(),
-                        entity: Template.currentData().entity,
+                        ...dataContext,
                         record: record
                     }
                 });
@@ -78,7 +78,7 @@ Template.ValidityTabbed.onCreated( function(){
                     navLabel: pwixI18n.label( I18N, it.tab_label ),
                     paneTemplate: it.tab_panel,
                     paneData: {
-                        ...Template.currentData(),
+                        ...dataContext,
                         holes: self.PCK.holes,
                         newPeriodCb: self.PCK.onNewPeriod
                     }
@@ -88,6 +88,7 @@ Template.ValidityTabbed.onCreated( function(){
             tabs.push({
                 navTemplate: 'validity_plus',
                 navData: {
+                    ...dataContext,
                     classes: 'nav-link',
                     holes: self.PCK.holes,
                     newPeriodCb: self.PCK.onNewPeriod
@@ -132,7 +133,7 @@ Template.ValidityTabbed.onCreated( function(){
         // merge with previous period
         //  this means we keep the displayed data, removing the previous period data, keeping only its starting date
         mergeLeft( index ){
-            const entityRv = Template.currentData.entity;
+            const entityRv = Template.currentData().entity;
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index-1, 1 );
@@ -144,7 +145,7 @@ Template.ValidityTabbed.onCreated( function(){
         // merge with next period
         //  this means we keep the displayed data, removing the next period data, keeping only its ending date
         mergeRight( index ){
-            const entityRv = Template.currentData.entity;
+            const entityRv = Template.currentData().entity;
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index+1, 1 );
@@ -155,7 +156,7 @@ Template.ValidityTabbed.onCreated( function(){
 
         // show informations about the record
         miInfo( index ){
-            const entity = Template.currentData.entity.get();
+            const entity = Template.currentData().entity.get();
             const obj = entity.DYN.records[index];
             Modal.run({
                 mdTitle: pwixI18n.label( I18N, 'tab.mi_title' ),
@@ -170,7 +171,7 @@ Template.ValidityTabbed.onCreated( function(){
         //  argument is the chosen free validity period as an object { start, end }
         onNewPeriod( period ){
             // build and order a new record
-            const entityRv = Template.currentData.entity;
+            const entityRv = Template.currentData().entity;
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const res = Validity.newRecord( entity, period, { start: self.PCK.startField, end: self.PCK.endField });
@@ -181,7 +182,7 @@ Template.ValidityTabbed.onCreated( function(){
 
         // remove the identified period
         removePeriod( index ){
-            const entityRv = Template.currentData.entity;
+            const entityRv = Template.currentData().entity;
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             entity.DYN.records.splice( index, 1 );

@@ -69,7 +69,7 @@ Template.validity_panel.helpers({
     // parms for validity_plus button
     parmsValidities( p ){
         return {
-            newPeriodCb: this.newPeriodCb || null,
+            ...this,
             classes: 'btn btn-sm btn-outline-secondary',
             period: p
         };
