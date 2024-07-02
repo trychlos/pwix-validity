@@ -11,6 +11,7 @@ const assert = require( 'assert' ).strict;
 
 import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 /*
  * @summary check an item vs a group of items to see if they are compatible
@@ -489,13 +490,13 @@ Validity.isValidPeriod = function( start, end ){
 
 /**
  * @summary Build a new record for a new period
- * @param {Object} entity the current entity published document, i.e. with its DYN.records array
+ * @param {Object} entity the current entity published document, i.e. with its DYN.records array of ReactiveVar's
  * @param {Object} period the new validity period (currently free), as a { start, end } object
  * @param {Object} opts options
  *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
  *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
  * @returns {Object} with following keys:
- *  - records: the new entity records array, including the new one, in the order of ascending effect start date
+ *  - records: the new entity records ReactiveVar's array, including the new one, in the order of ascending effect start date
  *  - index: the index of the new record in the returned array
  */
 Validity.newRecord = function( entity, period, opts={} ){
@@ -513,7 +514,7 @@ Validity.newRecord = function( entity, period, opts={} ){
         found = 0;
     } else {
         for( let i=0 ; i<array.length ; ++i ){
-            const it = array[i];
+            const it = array[i].get();
             if( DateJs.compare( period.start, it[startField] ) === +1 ){
                 found = i-1;
                 break;
@@ -525,7 +526,7 @@ Validity.newRecord = function( entity, period, opts={} ){
     }
     if( found >= 0 ){
         res = [ ...array ];
-        let record = _.cloneDeep( array[found] );
+        let record = _.cloneDeep( array[found].get());
         // Mongo identifier
         delete record._id;
         // collection-timestampable attributes
@@ -537,17 +538,17 @@ Validity.newRecord = function( entity, period, opts={} ){
         record[startField] = DateJs.sanitize( period.start );
         record[endField] = DateJs.sanitize( period.end );
         record.NEWRECORD = true;
-        res.push( record );
-        res.sort(( a, b ) => { return DateJs.compare( a[startField], b[startField ] ); });
+        res.push( new ReactiveVar( record ));
+        res.sort(( a, b ) => { return DateJs.compare( a.get()[startField], b.get()[startField ] ); });
     } else {
         console.warn( 'unable to find a reference record', period, array, opts );
     }
     // search where has been sorted this new record
     let index = -1;
     for( let i=0 ; i<res.length ; ++i ){
-        if( res[i].NEWRECORD === true ){
+        if( res[i].get().NEWRECORD === true ){
             index = i;
-            delete res[i].NEWRECORD;
+            delete res[i].get().NEWRECORD;
             break;
         }
     }
