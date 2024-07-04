@@ -119,68 +119,42 @@ Validity._is_same_period = function( a, b, opts ){
 };
 
 /**
- * @summary Compare the specified field among all validity records and returns the analyze
+ * @locus Anywhere
+ * @summary Compare the fields among all provided validity records and returns the analyze
  *  this let us have a different display when a field (e.g. a label) has changed between two periods
  *  and simultaneously provide a default display
- * @param {Object} group the item group as an object { id, items }
- * @param {String} field the name of the field to analyze
- * @param {Object} opts an options object with following keys:
- *  - closest: if set, the closest validity record
- *  - type: if set, expected data type, defaulting to string
+ * @param {Array} records the validity records
  * @returns {Object} the result as an object with following keys:
- *  -
+ *  - diffs: an array of the fields which do not have the same value among all records, may be empty
  */
-Validity.analyze = function( group, field, opts={} ){
-    //console.debug( 'group', group, 'field', field, 'opt', opts );
-    let value = null;
-    let count = 0;
-    let unset = 0;
-    let empty = 0;
-    let first = false;  // have found a first set and not empty value
-    let diff = false;   // have found at least two distinct set and not empty values
-    let byId = {};
-    group.items.every(( it ) => {
-        count += 1;
-        if( Object.keys( it ).includes( field )){
-            if( it[field] ){
-                if( !first ){
-                    value = ( opts.type === 'Array' ) ? it[field][0] : it[field];
-                    first = true;
-                //} else if( it[field] !== value ){
-                } else if( this._compare_typed_values( it[field], value, opts ) !== 0 ){
-                    diff = true;
-                }
-            } else {
-                empty += 1;
-            }
-            byId[ it._id ] = it[field];
-        } else {
-            unset += 1;
-            byId[ it._id ] = undefined;
-        }
-        return true;
+Validity.analyze = function( records ){
+    assert( records && _.isArray( records ), 'expect an array of records, found '+records );
+    const excludes = [ '_id' ];
+
+    // compute the list of fields
+    let fields = {};
+    records.forEach(( it ) => {
+        Object.keys( it ).map(( it ) => { fields[it] = true; });
     });
-    // if we have found a single set and not empty value, that's fine
-    //  else we want return the value of the closest element
-    if( diff ){
-        if( opts.closest ){
-            value = opts.closest[field];
-        } else {
-            const closest = this.closest( group.items );
-            value = closest[field];
-        }
-    }
-    // return all informations found for this field
-    return {
-        field: field,
-        count: count,
-        unset: unset,
-        empty: empty,
-        first: first,
-        diff: diff,
-        value: value,
-        byId: byId
+
+    // and for each field, scan each record
+    let result = {
+        diffs: []
     };
+    Object.keys( fields ).forEach(( it ) => {
+        if( !excludes.includes( it )){
+            const value = records[0][it];
+            for( let i=1 ; i<records.length ; ++i ){
+                if( records[i][it] !== value ){
+                    result.diffs.push( it );
+                    //console.debug( it, '0', value, i, records[i][it], 'differents' );
+                    break;
+                }
+            }
+        }
+    });
+
+    return result;
 };
 
 /**
