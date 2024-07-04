@@ -10,6 +10,7 @@
     - Add french translation
     - Define Validity.entitiesFieldDef() and Validity.recordsFieldDef() new functions, bumping minor candidate version number
     - Define Validity.closestByRecords() new function
+    - Define dtValidityDate new component
 
 ### 1.0.0
 

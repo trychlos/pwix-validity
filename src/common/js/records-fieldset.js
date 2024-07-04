@@ -18,6 +18,8 @@ Validity.recordsFieldDef = function(){
             type: Date,
             optional: true,
             dt_visible: false,
+            dt_className: 'dt-center',
+            dt_template: Meteor.isClient && Template.dtValidityDate,
             form_check: Validity.checks.effectStart,
             form_status: Forms.FieldType.C.OPTIONAL,
             help_line: pwixI18n.label( I18N, 'help.start_line' )
@@ -27,6 +29,8 @@ Validity.recordsFieldDef = function(){
             type: Date,
             optional: true,
             dt_visible: false,
+            dt_className: 'dt-center',
+            dt_template: Meteor.isClient && Template.dtValidityDate,
             form_check: Validity.checks.effectEnd,
             form_status: Forms.FieldType.C.OPTIONAL,
             help_line: pwixI18n.label( I18N, 'help.end_line' )
