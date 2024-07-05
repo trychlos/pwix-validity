@@ -3,5 +3,5 @@
  */
 
 Validity.entitiesFieldDef = function(){
-    return {};
+    return [];
 };
