@@ -38,17 +38,157 @@ The exported `Validity` global object provides following items:
 
 See [below](#configuration)
 
+##### `Validity.analyzeByRecords( records<Array> )`
+
+Compare the fields among provided array of validity records and returns the analyze result as an object with following keys:
+
+- `diffs`: an array of the field names which do not have the same value among all records, may be empty
+
+##### `Validity.atDateByRecords( records<Array>, opts<Object> )`
+
+Returns among the provided array of validity records the one which is valid at the `opts.date` provided date, defaulting to current local date. The returned value may be null.
+
+`opts` is an optional options object which may have following keys:
+
+- `date`: the searched validity date, as a Date object, defaulting to current date.
+
+##### `Validity.checkEnd( array<ReactiveVar>, item<Object>, opts<Object> )`
+
+##### `Validity.checkStart( array<ReactiveVar>, item<Object> )`
+
+Check whether the candidate ending (resp. starting) effect date would be valid regarding the whole entity items. It may notably be invalid if inside of an already allocated validity period.
+
+`array` is an array of validity records as `ReactiveVar`'s.
+
+`item` is the item which holds the candidate effect date.
+
+The functions return an error message, or null if the candidate date is valid.
+
+These functions are suitable for use as `Forms.Checker` check functions.
+
+##### `Validity.closest( entity<Object>, opts<Object> )`
+
+Returns the validity record the closest of the provided date as `opts.date`, defaulting to current local date.
+
+`entity` is the entity object, with its `DYN` added object, which notably includes `records`, the array of validity records as `ReactiveVar`'s.
+
+`opts` is an optional options object which may have following keys:
+
+- `date`: the searched validity date, as a Date object, defaulting to current date.
+
+The function returns its result as an object with following keys:
+
+- `closest`: the searched closest validity record, always set
+
+- `index`: the zero-based index of this record in the provided array.
+
+##### `Validity.closestByRecords( records<Array>, opts<Object> )`
+
+Returns the validity record the closest of the provided date as `opts.date`, defaulting to current local date.
+
+`records` is the array of validity records.
+
+`opts` is an optional options object which may have following keys:
+
+- `date`: the searched validity date, as a Date object, defaulting to current date.
+
+The function returns its result as an object with following keys:
+
+- `closest`: the searched closest validity record, always set
+
+- `index`: the zero-based index of this record in the provided array.
+
+##### `Validity.englobingPeriodByRecords( records<Array> )`
+
+Computes the englobing period of the provided validity records, and returns the result as an object with following keys:
+
+- `start`: the lowest effect start date, may be null for infinite
+
+- `end`: the highest effect end date, may be null for infinite.
+
 ##### `Validity.entitiesFieldDef()`
 
 Returns an object suitable for a `Field.Def` definition of the entities collection, as an empty definition as `pwix:validity` doesn't add anything to it.
 
-This function should be called from common code, but you can just omit it as it does nothing, and is only defined for completeness.
+This function should be called from common code, but you can just omit it as it does nothing at the moment, and is only defined for completeness.
+
+```js
+    Validity.entitiesFieldDef = function(){
+        return [];
+    };
+```
+
+##### `Validity.holesByRecords( array<Object> )`
+
+Computes the available validity periods, i.e. the periods which are NOT covered by an existing validity record.
+
+`array` is the array of validity records.
+
+The function returns its result as an array, maybe empty, of objects with following keys:
+
+- `start`: the starting uncovered date, may be unset for infinite
+
+- `end`: the ending uncovered date, may be unset for infinite
+
+##### `Validity.isValidPeriod( start<Date|String>, end<Date|String> )`
+
+Tests whether the `start` and `end` provided dates make a valid validity period.
+
+`array` is the array of validity records.
+
+The function returns a `true`|`false` boolean.
+
+##### `Validity.newRecord( entity<Object>, period<Object> )`
+
+Builds a new validity record, based on the current data.
+
+`entity`: the current entity published document, i.e. with its `DYN.records` array of `ReactiveVar`'s
+
+- `period`: the new (currently free) validity period, as a `{ start, end }` object
+
+The function returns its result as an object with following keys:
+
+- `records`: the new entity records `ReactiveVar`'s array, including the new one, in the order of ascending effect start date
+
+- `index`: the index of the new record in the returned array.
 
 ##### `Validity.recordsFieldDef()`
 
 Returns an array suitable for a `Field.Set` extension, as the following definition:
 
 ```js
+    Validity.recordsFieldDef = function(){
+        return [
+            {
+                name: 'entity',
+                type: String,
+                dt_visible: false,
+                help_line: pwixI18n.label( I18N, 'help.entity_line' )
+            },
+            {
+                name: 'effectStart',
+                type: Date,
+                optional: true,
+                dt_visible: false,
+                dt_className: 'dt-center',
+                dt_template: Meteor.isClient && Template.dtValidityDate,
+                form_check: Validity.checks.effectStart,
+                form_status: Forms.FieldType.C.OPTIONAL,
+                help_line: pwixI18n.label( I18N, 'help.start_line' )
+            },
+            {
+                name: 'effectEnd',
+                type: Date,
+                optional: true,
+                dt_visible: false,
+                dt_className: 'dt-center',
+                dt_template: Meteor.isClient && Template.dtValidityDate,
+                form_check: Validity.checks.effectEnd,
+                form_status: Forms.FieldType.C.OPTIONAL,
+                help_line: pwixI18n.label( I18N, 'help.end_line' )
+            }
+        ];
+    };
 ```
 
 This function MUST be called from common code.

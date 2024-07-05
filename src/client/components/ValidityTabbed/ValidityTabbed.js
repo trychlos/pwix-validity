@@ -244,7 +244,7 @@ Template.ValidityTabbed.onCreated( function(){
         self.PCK.periods.get().forEach(( it ) => {
             validities.push({ start: it.start, end: it.end });
         });
-        const holes = Validity.holes( validities, {
+        const holes = Validity.holesByRecords( validities, {
             start: 'start',
             end: 'end'
         });

@@ -127,7 +127,7 @@ Validity._is_same_period = function( a, b, opts ){
  * @returns {Object} the result as an object with following keys:
  *  - diffs: an array of the fields which do not have the same value among all records, may be empty
  */
-Validity.analyze = function( records ){
+Validity.analyzeByRecords = function( records ){
     assert( records && _.isArray( records ), 'expect an array of records, found '+records );
     const excludes = [ '_id' ];
 
@@ -167,7 +167,7 @@ Validity.analyze = function( records ){
  * @returns {Object} the record whose validity period includes the specified date, or null if none
  *  This method is so more strict than closest().
  */
-Validity.atDate = function( array, opts={} ){
+Validity.atDateByRecords = function( array, opts={} ){
     const startField = opts.start || 'effectStart';
     const endField = opts.end || 'effectEnd';
     const date = opts.date || new Date();
@@ -230,7 +230,6 @@ Validity.checkEnd = function( array, item, opts={} ){
     let res = null;
 
     if( item[endField] && !DateJs.isValid( item[endField] )){
-        console.warn( 'invalid date item[endField]', item[endField] );
         res = pwixI18n.label( I18N, 'check.invalid_date' );
 
     } else if( this.isValidPeriod( item[startField], item[endField] )){
@@ -260,7 +259,6 @@ Validity.checkStart = function( array, item, opts={} ){
     let res = null;
 
     if( item[startField] && !DateJs.isValid( item[startField] )){
-        console.error( 'invalid date item[startField]', item[startField] );
         res = pwixI18n.label( I18N, 'check.invalid_date' );
 
     } else if( this.isValidPeriod( item[startField], item[endField] )){
@@ -398,6 +396,42 @@ Validity.group = function( array, opts={} ){
 */
 
 /**
+ * @summary Computes the englobing period, i.e. the period from the lowest effect start date to the highest effect end date.
+ * @param {Array} records the current validity records
+ * @returns {Object} with following keys:
+ *  - start: the lowest effect start date, or null for infinite
+ *  - end: the highest effect end date, or null for infinite.
+ */
+Validity.englobingPeriodByRecords = function( records, opts={} ){
+    const startField = opts.start || 'effectStart';
+    const endField = opts.end || 'effectEnd';
+
+    let lowest;
+    let highest;
+    let first = true;
+
+    records.forEach(( it ) => {
+        if( first ){
+            lowest = it[startField];
+            highest = it[endField];
+        } else {
+            if( DateJs.compare( it[startField], lowest ) < 0 ){
+                lowest = it[startField];
+            }
+            if( DateJs.compare( it[endField], highest, { start: false }) > 0 ){
+                highest = it[endField];
+            }
+        }
+        first = false;
+    });
+
+    return {
+        start: lowest,
+        end: highest
+    };
+};
+
+/**
  * @summary Find holes, i.e. period of times which are not in a validity period
  * @param {Array} array an array of objects which may contain start and end effect dates
  * @param {Object} opts options
@@ -407,7 +441,7 @@ Validity.group = function( array, opts={} ){
  *  - start: the starting uncovered date, may be unset for infinite
  *  - end: the ending uncovered date, may be unset for infinite
  */
-Validity.holes = function( array, opts={} ){
+Validity.holesByRecords = function( array, opts={} ){
     const startField = opts.start || 'effectStart';
     const endField = opts.end || 'effectEnd';
 
