@@ -109,10 +109,10 @@ Validity._intervals_overlap = function( a, b ){
  * @returns {Boolean} true if the periods are the same
  */
 Validity._is_same_period = function( a, b, opts ){
-    const startDate1 = DateJs.sanitizeToMs( a[0], DateJs.infinite.start ); // Represents the beginning of time
-    const endDate1 = DateJs.sanitizeToMs( a[1], DateJs.infinite.end );   // Represents the end of time
-    const startDate2 = DateJs.sanitizeToMs( b[0], DateJs.infinite.start );
-    const endDate2 = DateJs.sanitizeToMs( b[1], DateJs.infinite.end );
+    const startDate1 = DateJs.toMs( a[0], DateJs.infinite.start ); // Represents the beginning of time
+    const endDate1 = DateJs.toMs( a[1], DateJs.infinite.end );   // Represents the end of time
+    const startDate2 = DateJs.toMs( b[0], DateJs.infinite.start );
+    const endDate2 = DateJs.toMs( b[1], DateJs.infinite.end );
     const same = startDate1 === startDate2 && endDate1 === endDate2;
     //console.debug( 'same_period', a, b, startDate1, endDate1, startDate2, endDate2, same );
     return same;

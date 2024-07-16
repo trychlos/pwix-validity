@@ -12,6 +12,7 @@
     - Define Validity.closestByRecords() new function
     - Define dtValidityDate new component
     - Define Validity.englobingPeriodByRecords() new function
+    - Fix '+' validity nav
 
 ### 1.0.0
 

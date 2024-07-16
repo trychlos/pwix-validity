@@ -45,6 +45,9 @@ Template.ValidityTabbed.onCreated( function(){
             }
         ],
 
+        // keep the passed-in entityRv
+        entityRv: null,
+
         // the name of the fields which contain starting and ending effect dates
         startField: null,
         endField: null,
@@ -133,7 +136,7 @@ Template.ValidityTabbed.onCreated( function(){
         // merge with previous period
         //  this means we keep the displayed data, removing the previous period data, keeping only its starting date
         mergeLeft( index ){
-            const entityRv = Template.currentData().entity;
+            const entityRv = self.PCK.entityRv;
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index-1, 1 );
@@ -145,7 +148,7 @@ Template.ValidityTabbed.onCreated( function(){
         // merge with next period
         //  this means we keep the displayed data, removing the next period data, keeping only its ending date
         mergeRight( index ){
-            const entityRv = Template.currentData().entity;
+            const entityRv = self.PCK.entityRv;
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index+1, 1 );
@@ -156,7 +159,7 @@ Template.ValidityTabbed.onCreated( function(){
 
         // show informations about the record
         miInfo( index ){
-            const entity = Template.currentData().entity.get();
+            const entity = self.PCK.entityRv.get();
             const obj = entity.DYN.records[index];
             Modal.run({
                 mdTitle: pwixI18n.label( I18N, 'tab.mi_title' ),
@@ -171,7 +174,7 @@ Template.ValidityTabbed.onCreated( function(){
         //  argument is the chosen free validity period as an object { start, end }
         onNewPeriod( period ){
             // build and order a new record
-            const entityRv = Template.currentData().entity;
+            const entityRv = self.PCK.entityRv;
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const res = Validity.newRecord( entity, period, { start: self.PCK.startField, end: self.PCK.endField });
@@ -182,7 +185,7 @@ Template.ValidityTabbed.onCreated( function(){
 
         // remove the identified period
         removePeriod( index ){
-            const entityRv = Template.currentData().entity;
+            const entityRv = self.PCK.entityRv;
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             entity.DYN.records.splice( index, 1 );
@@ -231,6 +234,7 @@ Template.ValidityTabbed.onCreated( function(){
         let periods = [];
         const entityRv = Template.currentData().entity;
         check( entityRv, ReactiveVar );
+        self.PCK.entityRv = entityRv;
         //console.debug( entityRv );
         entityRv.get().DYN.records.forEach(( it ) => {
             periods.push({ start: it.get()[self.PCK.startField], end: it.get()[self.PCK.endField] });

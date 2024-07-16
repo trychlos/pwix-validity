@@ -54,11 +54,11 @@ Template.validity_plus.helpers({
     itemLabel( p ){
         let res = '';
         if( !DateJs.isValid( p.start )){
-            res =pwixI18n.label( I18N, 'validities.plus.upto', DateJs.toString( p.end ));
+            res = pwixI18n.label( I18N, 'plus.upto', DateJs.toString( p.end ));
         } else if( !DateJs.isValid( p.end )){
-            res = pwixI18n.label( I18N, 'validities.plus.from', DateJs.toString( p.start ));
+            res = pwixI18n.label( I18N, 'plus.from', DateJs.toString( p.start ));
         } else {
-            res = pwixI18n.label( I18N, 'validities.plus.fromto', DateJs.toString( p.start ), DateJs.toString( p.end ));
+            res = pwixI18n.label( I18N, 'plus.fromto', DateJs.toString( p.start ), DateJs.toString( p.end ));
         }
         return res;
     }
