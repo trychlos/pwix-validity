@@ -20,7 +20,8 @@ Template.validity_band.onRendered( function(){
     const self = this;
 
     // have a colored band for each period from infinite to infinite
-    //  leaving free periods without color
+    //  have a 'used' color for used periods
+    //  have a 'free' color for free periods
     self.autorun(() => {
         const periods = Template.currentData().periods;
 

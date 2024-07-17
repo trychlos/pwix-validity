@@ -16,6 +16,7 @@
     - Fix record informations
     - Fix dropdowns stylesheet
     - Fix validity plus dropdown action
+    - Configure effectStart and effectEnd field names (todo #2)
 
 ### 1.0.0
 

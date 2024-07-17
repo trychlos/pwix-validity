@@ -18,13 +18,11 @@ import { ReactiveVar } from 'meteor/reactive-var';
  * @param {Array<ReactiveVar>} array the entity records array as ReactiveVar's
  * @param {Object} period the period to be tested as an object { start, end }
  * @param {Object} opts options
- *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
- *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
  * @returns {Boolean} true if both are compatible
  */
 Validity._check_against = function( array, period, opts={} ){
-    const startField = opts.start || 'effectStart';
-    const endField = opts.end || 'effectEnd';
+    const startField = Validity.configure().effectStart;
+    const endField = Validity.configure().effectEnd;
 
     let ok = true;
 
@@ -162,15 +160,13 @@ Validity.analyzeByRecords = function( records ){
  * @locus Anywhere
  * @param {Array} array the array of available validity records for the entity
  * @param {Object} opts options
- *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
- *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
  *  - date: the searched validity date, as a Date object, defaulting to current date
  * @returns {Object} the record whose validity period includes the specified date, or null if none
  *  This method is so more strict than closest().
  */
 Validity.atDateByRecords = function( array, opts={} ){
-    const startField = opts.start || 'effectStart';
-    const endField = opts.end || 'effectEnd';
+    const startField = Validity.configure().effectStart;
+    const endField = Validity.configure().effectEnd;
     const date = opts.date || new Date();
     const dateTime = date.getTime();    // the target date as epoch
 
@@ -221,13 +217,11 @@ Validity.atDateByRecords = function( array, opts={} ){
  * @param {Array<ReactiveVar>} array the array of available validity records as ReactiveVar's for the entity
  * @param {Object} item the item which holds the candidate effect date
  * @param {Object} opts options
- *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
- *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
  * @returns {String} an error message or null
  */
 Validity.checkEnd = function( array, item, opts={} ){
-    const startField = opts.start || 'effectStart';
-    const endField = opts.end || 'effectEnd';
+    const startField = Validity.configure().effectStart;
+    const endField = Validity.configure().effectEnd;
     let res = null;
 
     if( item[endField] && !DateJs.isValid( item[endField] )){
@@ -250,13 +244,11 @@ Validity.checkEnd = function( array, item, opts={} ){
  * @param {Array<ReactiveVar>} array the array of available validity records as ReactiveVar's for the entity
  * @param {Object} item the item which holds the candidate effect date
  * @param {Object} opts options
- *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
- *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
  * @returns {String} an error message or null
  */
 Validity.checkStart = function( array, item, opts={} ){
-    const startField = opts.start || 'effectStart';
-    const endField = opts.end || 'effectEnd';
+    const startField = Validity.configure().effectStart;
+    const endField = Validity.configure().effectEnd;
     let res = null;
 
     if( item[startField] && !DateJs.isValid( item[startField] )){
@@ -299,8 +291,6 @@ Validity.closest = function( entity, opts={} ){
  * @locus Anywhere
  * @param {Array} records the array of validity records documents (to be callable from server side) of an entity
  * @param {Object} opts options
- *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
- *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
  *  - date: the searched validity date, as a Date object, defaulting to current date
  * @returns {Object} with following keys:
  *  - record: the record whose validity period is the closest of the specified date (and, ideally, includes it)
@@ -308,9 +298,8 @@ Validity.closest = function( entity, opts={} ){
  */
 Validity.closestByRecords = function( records, opts={} ){
     assert( _.isArray( records ), 'expect records be an array' );
-
-    const startField = opts.start || 'effectStart';
-    const endField = opts.end || 'effectEnd';
+    const startField = Validity.configure().effectStart;
+    const endField = Validity.configure().effectEnd;
     const date = opts.date || new Date();
     const dateTime = date.getTime();    // the target date as epoch
 
@@ -348,64 +337,17 @@ Validity.closestByRecords = function( records, opts={} ){
     };
 };
 
-/*
- * @summary Group records by entity
- * @param {Array} array the array to be grouped (e.g. directly fetched from the database)
- * @param {Object} opts options
- *  - entity: the name of the field which identifies an item, whatever be the validity, defaulting to 'entity'
- *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
- * @returns {Array} an array of objects with following keys:
- *  - entity: the item identifier
- *  - items: the array of validity records for this entity item, sorted by ascending start effect date
- *
- * Note: this structure is needed as we want keep the ability to add some other keys to each item object.
- */
-/*
-Validity.group = function( array, opts={} ){
-    const itemid = opts.entity || 'entity';
-    const startField = opts.start || 'effectStart';
-
-    // build a hash indexed by entity identifiers with all the records as a value array
-    let hash = {};
-    array.every(( it ) => {
-        if( Object.keys( hash ).includes( it[itemid] )){
-            hash[ it[itemid] ].push( it );
-        } else {
-            hash[ it[itemid] ] = [ it ];
-        }
-        return true;
-    });
-
-    // sort each item array by ascending start effect date
-    Object.keys( hash ).every(( id ) => {
-        hash[id].sort(( a, b ) => { return DateJs.compare( a[startField], b[startField ] ); });
-        return true;
-    });
-
-    // last return the formatted result
-    let result = [];
-    Object.keys( hash ).every(( id ) => {
-        let o = {};
-        o[itemid] = id;
-        o.items = hash[id];
-        result.push( o );
-        return true;
-    });
-
-    return result;
-};
-*/
-
 /**
  * @summary Computes the englobing period, i.e. the period from the lowest effect start date to the highest effect end date.
  * @param {Array} records the current validity records
+ * @param {Object} opts an optional options object
  * @returns {Object} with following keys:
  *  - start: the lowest effect start date, or null for infinite
  *  - end: the highest effect end date, or null for infinite.
  */
 Validity.englobingPeriodByRecords = function( records, opts={} ){
-    const startField = opts.start || 'effectStart';
-    const endField = opts.end || 'effectEnd';
+    const startField = Validity.configure().effectStart;
+    const endField = Validity.configure().effectEnd;
 
     let lowest;
     let highest;
@@ -435,16 +377,14 @@ Validity.englobingPeriodByRecords = function( records, opts={} ){
 /**
  * @summary Find holes, i.e. period of times which are not in a validity period
  * @param {Array} array an array of objects which may contain start and end effect dates
- * @param {Object} opts options
- *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
- *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
+ * @param {Object} opts an optional options object
  * @returns {Array} an array, maybe empty, of objects with following keys:
  *  - start: the starting uncovered date, may be unset for infinite
  *  - end: the ending uncovered date, may be unset for infinite
  */
 Validity.holesByRecords = function( array, opts={} ){
-    const startField = opts.start || 'effectStart';
-    const endField = opts.end || 'effectEnd';
+    const startField = Validity.configure().effectStart;
+    const endField = Validity.configure().effectEnd;
 
     let holes = [];
 
@@ -502,8 +442,6 @@ Validity.isValidPeriod = function( start, end ){
  * @param {Object} entity the current entity published document, i.e. with its DYN.records array of ReactiveVar's
  * @param {Object} period the new validity period (currently free), as a { start, end } object
  * @param {Object} opts options
- *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
- *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
  * @returns {Object} with following keys:
  *  - records: the new entity records ReactiveVar's array, including the new one, in the order of ascending effect start date
  *  - index: the index of the new record in the returned array
@@ -511,9 +449,8 @@ Validity.isValidPeriod = function( start, end ){
 Validity.newRecord = function( entity, period, opts={} ){
     let array = entity.DYN.records;
     assert( _.isArray( array ), 'expect DYN.records be an array' );
-
-    const startField = opts.start || 'effectStart';
-    const endField = opts.end || 'effectEnd';
+    const startField = Validity.configure().effectStart;
+    const endField = Validity.configure().effectEnd;
     let res = null;
     //console.debug( 'period', period, DateJs.isValid( period.start ), DateJs.isValid( period.end ));
 

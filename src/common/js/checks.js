@@ -25,11 +25,12 @@ Validity.checks = {
     //  data comes from the edition panel, passed-in through the Forms.Checker instance
     async effectEnd( value, data, opts={} ){
         Validity.checks._assert_data_content( 'Validity.checks.effectEnd()', data );
-        const item = data.entity.get().DYN.records[data.index].get();
+        let item = data.entity.get().DYN.records[data.index].get();
         return Promise.resolve( null )
             .then(() => {
                 if( opts.update !== false ){
-                    item.effectEnd = value ? new Date( value ) : null;
+                    const endField = Validity.configure().effectEnd;
+                    item[endField] = value ? new Date( value ) : null;
                     data.entity.get().DYN.records[data.index].set( item );
                 }
                 const msg = Validity.checkEnd( data.entity.get().DYN.records, item );
@@ -42,11 +43,12 @@ Validity.checks = {
 
     async effectStart( value, data, opts={} ){
         Validity.checks._assert_data_content( 'Validity.checks.effectStart()', data );
-        const item = data.entity.get().DYN.records[data.index].get();
+        let item = data.entity.get().DYN.records[data.index].get();
         return Promise.resolve( null )
             .then(() => {
                 if( opts.update !== false ){
-                    item.effectStart = value ? new Date( value ) : null;
+                    const startField = Validity.configure().effectStart;
+                    item[startField] = value ? new Date( value ) : null;
                     data.entity.get().DYN.records[data.index].set( item );
                 }
                 const msg = Validity.checkStart( data.entity.get().DYN.records, data.item.get());
