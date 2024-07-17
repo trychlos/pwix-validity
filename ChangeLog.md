@@ -14,6 +14,7 @@
     - Define Validity.englobingPeriodByRecords() new function
     - Fix '+' validity nav
     - Fix record informations
+    - Fix dropdowns stylesheet
 
 ### 1.0.0
 
