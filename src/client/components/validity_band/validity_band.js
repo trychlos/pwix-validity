@@ -66,21 +66,21 @@ Template.validity_band.onRendered( function(){
                 switch( parts[i].class ){
                     case 'used':
                         if( !DateJs.isValid( parts[i].start )){
-                            $div.attr( 'title', pwixI18n.label( I18N, 'validities.band.used_to', DateJs.toString( parts[i].end )));
+                            $div.attr( 'title', pwixI18n.label( I18N, 'band.used_to', DateJs.toString( parts[i].end )));
                         } else if( DateJs.isValid( parts[i].end )){
-                            $div.attr( 'title', pwixI18n.label( I18N, 'validities.band.used_fromto', DateJs.toString( parts[i].start ), DateJs.toString( parts[i].end )));
+                            $div.attr( 'title', pwixI18n.label( I18N, 'band.used_fromto', DateJs.toString( parts[i].start ), DateJs.toString( parts[i].end )));
                         } else {
-                            $div.attr( 'title', pwixI18n.label( I18N, 'validities.band.used_from', DateJs.toString( parts[i].start )));
+                            $div.attr( 'title', pwixI18n.label( I18N, 'band.used_from', DateJs.toString( parts[i].start )));
                         }
                         break;
 
                     case 'free':
                         if( !DateJs.isValid( parts[i].start )){
-                            $div.attr( 'title', pwixI18n.label( I18N, 'validities.band.free_to', DateJs.toString( parts[i].end )));
+                            $div.attr( 'title', pwixI18n.label( I18N, 'band.free_to', DateJs.toString( parts[i].end )));
                         } else if( DateJs.isValid( parts[i].end )){
-                            $div.attr( 'title', pwixI18n.label( I18N, 'validities.band.free_fromto', DateJs.toString( parts[i].start ), DateJs.toString( parts[i].end )));
+                            $div.attr( 'title', pwixI18n.label( I18N, 'band.free_fromto', DateJs.toString( parts[i].start ), DateJs.toString( parts[i].end )));
                         } else {
-                            $div.attr( 'title', pwixI18n.label( I18N, 'validities.band.free_from', DateJs.toString( parts[i].start )));
+                            $div.attr( 'title', pwixI18n.label( I18N, 'band.free_from', DateJs.toString( parts[i].start )));
                         }
                         break;
                 }
@@ -90,7 +90,7 @@ Template.validity_band.onRendered( function(){
         // no free period at all - have only one full used period
         } else {
             $div = $( '<div></div' ).css({ width: '100%' }).addClass( 'used' );
-            $div.attr( 'title', pwixI18n.label( I18N, 'validities.band.used_fromto_infinite' ));
+            $div.attr( 'title', pwixI18n.label( I18N, 'band.used_fromto_infinite' ));
             self.$( '.validity-band .band' ).append( $div );
         }
     });
