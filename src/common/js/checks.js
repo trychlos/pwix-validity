@@ -29,7 +29,7 @@ Validity.checks = {
                 }
                 const msg = Validity.checkEnd( data.entity.get().DYN.records, data.item.get());
                 return msg ? new TM.TypedMessage({
-                    level: TM.MessageType.C.ERROR,
+                    level: TM.MessageLevel.C.ERROR,
                     message: msg
                 }) : null;
             });
@@ -46,7 +46,7 @@ Validity.checks = {
                 }
                 const msg = Validity.checkStart( data.entity.get().DYN.records, data.item.get());
                 return msg ? new TM.TypedMessage({
-                    level: TM.MessageType.C.ERROR,
+                    level: TM.MessageLevel.C.ERROR,
                     message: msg
                 }) : null;
             });
