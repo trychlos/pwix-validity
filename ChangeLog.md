@@ -13,6 +13,7 @@
     - Define dtValidityDate new component
     - Define Validity.englobingPeriodByRecords() new function
     - Fix '+' validity nav
+    - Fix record informations
 
 ### 1.0.0
 

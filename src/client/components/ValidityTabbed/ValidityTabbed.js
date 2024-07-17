@@ -160,7 +160,7 @@ Template.ValidityTabbed.onCreated( function(){
         // show informations about the record
         miInfo( index ){
             const entity = self.PCK.entityRv.get();
-            const obj = entity.DYN.records[index];
+            const obj = entity.DYN.records[index].get();
             Modal.run({
                 mdTitle: pwixI18n.label( I18N, 'tab.mi_title' ),
                 mdBody: 'miPanel',
@@ -257,12 +257,12 @@ Template.ValidityTabbed.onCreated( function(){
 
     // track periods
     self.autorun(() => {
-        console.debug( 'periods', self.PCK.periods.get());
+        //console.debug( 'periods', self.PCK.periods.get());
     });
 
     // track holes
     self.autorun(() => {
-        console.debug( 'holes', self.PCK.holes.get());
+        //console.debug( 'holes', self.PCK.holes.get());
     });
 
     // track edited to dynamically rebuild tabs
