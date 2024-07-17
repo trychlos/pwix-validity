@@ -14,7 +14,7 @@ Validity.recordsFieldDef = function(){
             help_line: pwixI18n.label( I18N, 'help.entity_line' )
         },
         {
-            name: 'effectStart',
+            name: Validity.configure().effectStart,
             type: Date,
             optional: true,
             dt_visible: false,
@@ -25,7 +25,7 @@ Validity.recordsFieldDef = function(){
             help_line: pwixI18n.label( I18N, 'help.start_line' )
         },
         {
-            name: 'effectEnd',
+            name: Validity.configure().effectEnd,
             type: Date,
             optional: true,
             dt_visible: false,

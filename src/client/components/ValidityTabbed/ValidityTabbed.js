@@ -12,8 +12,6 @@
  * Parms:
  * - entity: the to-be-edited item entity, as a ReactiveVar, including a DYN.records array of ReactiveVar's - empty if new
  * - template: the to-be-included Blaze template name
- * - startField: name of the field which contains the starting effect date, defaulting to 'effectStart'
- * - endField: name of the field which contains the ending effect date, defaulting to 'effectEnd'
  * - withValidities: whether we want deal with validity records, defaulting to true
  */
 
@@ -49,8 +47,8 @@ Template.ValidityTabbed.onCreated( function(){
         entityRv: null,
 
         // the name of the fields which contain starting and ending effect dates
-        startField: null,
-        endField: null,
+        startField: Validity.configure().effectStart,
+        endField: Validity.configure().effectEnd,
 
         // each time the item changes, recomputes the current vality periods
         periods: new ReactiveVar( [], _.isEqual ),
@@ -224,10 +222,6 @@ Template.ValidityTabbed.onCreated( function(){
             });
         }
     };
-
-    // get starting and ending effect field names
-    self.PCK.startField = Template.currentData().startField || 'effectStart';
-    self.PCK.endField = Template.currentData().endField || 'effectEnd';
 
     // track the validity periods from the 'entity.DYN.records' array of ReactiveVar's
     self.autorun(() => {

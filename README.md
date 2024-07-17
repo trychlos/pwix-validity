@@ -77,8 +77,6 @@ Check whether the candidate ending (resp. starting) effect date would be valid r
 
 The functions return an error message, or null if the candidate date is valid.
 
-These functions are suitable for use as `Forms.Checker` check functions.
-
 ##### `Validity.closest( entity<Object>, opts<Object> )`
 
 Returns the validity record the closest of the provided date as `opts.date`, defaulting to current local date.
@@ -155,7 +153,7 @@ The function returns a `true`|`false` boolean.
 
 Builds a new validity record, based on the current data.
 
-`entity`: the current entity published document, i.e. with its `DYN.records` array of `ReactiveVar`'s
+- `entity`: the current entity published document, i.e. with its `DYN.records` array of `ReactiveVar`'s
 
 - `period`: the new (currently free) validity period, as a `{ start, end }` object
 
@@ -234,10 +232,6 @@ The expected data context is:
 
     - `index`: the index in the `DYN.records` array of the record this pane is expected to manage.
 
-- `startField`: the name of the field (of the record documents) which contains the starting effect date, defaulting to 'effectStart'
-
-- `endField`: the name of the field (of the record documents) which contains the ending effect date, defaulting to 'effectEnd'
-
 - `withValidities`: whether we want deal with validity records, defaulting to `true`.
 
 #### `ValidityFieldset`
@@ -262,6 +256,13 @@ If the calling code makes use of `pwix:forms`, it can also uses `.js-start input
 The package's behavior can be configured through a call to the `Validity.configure()` method, with just a single javascript object argument, which itself should only contains the options you want override.
 
 Known configuration options are:
+
+- `effectStart`
+- `effectEnd`
+
+    The name of the fields which hold the starting and ending effect dates.
+
+    Defaulting to `effectStart` and `effectEnd`.
 
 - `verbosity`
 
