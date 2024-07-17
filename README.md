@@ -10,7 +10,20 @@ Any object may be defined with validity periods. The used taxonomy is:
 
 - each validity period of the object (of the *entity*) is materialized in the database as a distinct document, called a *record* (or a *validity record* when we want point out the fact).
 
-We do not define here any data, apart from the entity identifier, which would be common to all validity records.
+This package defines following data:
+
+- at the entity level:
+
+    - an entity identifier
+    - an entity notes, will be common to all records
+
+- at the record level:
+
+    - an attached entity (the entity identifier above)
+    - a start date, which be null or undefined
+    - an end date, which be null or undefined.
+
+    A starting (resp. ending) null or undefined data means from (resp. to) infinite.
 
 ## Installation
 
@@ -211,9 +224,15 @@ The expected data context is:
 
 - `entity`: a ReactiveVar which must contain the edited entity document.
 
-    It is expected that the document contains a `DYN` object, with a `records` key. The `DYN.records` value is an array of ReactiveVar's which contains a validity record.
+    It is expected that the document contains a `DYN` object, with a `records` key. The `DYN.records` value is an array of ReactiveVar's which each contains a validity record.
 
 - `template`: the name of the Blaze template to be used for records panes.
+
+    The record panes will receive their data context as:
+
+    - the data context itself passed to `ValidityTabbed` (and, notably, the `entity` ReactiveVar),
+
+    - `index`: the index in the `DYN.records` array of the record this pane is expected to manage.
 
 - `startField`: the name of the field (of the record documents) which contains the starting effect date, defaulting to 'effectStart'
 
@@ -236,6 +255,8 @@ Even if this component embeds itself a `DateInput` advanced date input component
 - `validity-start`, a valid `Date`, or null
 - `validity-end`, a valid `Date`, or null.
 
+If the calling code makes use of `pwix:forms`, it can also uses `.js-start input` and `.js-end input` selectors to handle these respective fields checks.
+
 ## Configuration
 
 The package's behavior can be configured through a call to the `Validity.configure()` method, with just a single javascript object argument, which itself should only contains the options you want override.
@@ -255,6 +276,8 @@ Known configuration options are:
     - `Validity.C.Verbose.CONFIGURE`
 
         Trace `Validity.configure()` calls and their result
+    
+    Defaults to `Validity.C.Verbose.CONFIGURE`.
 
 Please note that `Validity.configure()` method should be called in the same terms both in client and server sides.
 

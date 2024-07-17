@@ -15,27 +15,28 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 /*
  * @summary check an item vs a group of items to see if they are compatible
- * @param {Array} array the entity records array as ReactiveVar's
- * @param {Object} item the item to be tested, with fields { id, start, end }
+ * @param {Array<ReactiveVar>} array the entity records array as ReactiveVar's
+ * @param {Object} period the period to be tested as an object { start, end }
  * @param {Object} opts options
  *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
  *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
  * @returns {Boolean} true if both are compatible
  */
-Validity._check_against = function( array, item, opts={} ){
+Validity._check_against = function( array, period, opts={} ){
     const startField = opts.start || 'effectStart';
     const endField = opts.end || 'effectEnd';
 
     let ok = true;
 
-    //console.debug( 'item', item.start, item.end );
+    //console.debug( 'array', array );
+    console.debug( 'period', period.start, period.end );
     array.every(( it ) => {
         const record = it.get();
-        //console.debug( 'it', it[startField], it[endField],
-        //    'is_same_period', this._is_same_period( [ item.start, item.end ], [ it[startField], it[endField] ] ),
-        //    'overlap', this._intervals_overlap( [ item.start, item.end ], [ it[startField], it[endField] ] ));
-        if( !this._is_same_period( [ item.start, item.end ], [ record[startField], record[endField] ] )){
-            const overlap = this._intervals_overlap( [ item.start, item.end ], [ record[startField], record[endField] ] );
+        console.debug( 'record', record[startField], record[endField],
+            'is_same_period', this._is_same_period( [ period.start, period.end ], [ record[startField], record[endField] ] ),
+            'overlap', this._intervals_overlap( [ period.start, period.end ], [ record[startField], record[endField] ] ));
+        if( !this._is_same_period( [ period.start, period.end ], [ record[startField], record[endField] ] )){
+            const overlap = this._intervals_overlap( [ period.start, period.end ], [ record[startField], record[endField] ] );
             ok &&= ( overlap === -1 );
         }
         return ok;
@@ -217,7 +218,7 @@ Validity.atDateByRecords = function( array, opts={} ){
  * @locus Anywhere
  * @summary Check whether the candidate ending effect date would be valid regarding the whole entity items
  *  It may notably be invalid if inside of an already allocated validity period.
- * @param {Array} array the array of available validity records as ReactiveVar's for the entity
+ * @param {Array<ReactiveVar>} array the array of available validity records as ReactiveVar's for the entity
  * @param {Object} item the item which holds the candidate effect date
  * @param {Object} opts options
  *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
@@ -246,7 +247,7 @@ Validity.checkEnd = function( array, item, opts={} ){
  * @locus Anywhere
  * @summary Check whether the candidate starting effect date would be valid regarding the whole entity items
  *  It may notably be invalid if inside of an already allocated validity period.
- * @param {Array} array the array of available validity records as ReactiveVar's for the entity
+ * @param {Array<ReactiveVar>} array the array of available validity records as ReactiveVar's for the entity
  * @param {Object} item the item which holds the candidate effect date
  * @param {Object} opts options
  *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'

@@ -9,25 +9,30 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
 
 Validity.checks = {
-    // item is a ReactiveVar which contains the edited document
-    _assert_data_itemrv( caller, data ){
-        assert.ok( data, caller+' data required' );
-        assert.ok( data.item, caller+' data.item required' );
-        assert.ok( data.item instanceof ReactiveVar, caller+' data.item expected to be a ReactiveVar' );
+    // entity is a ReactiveVar which contains the edited entity document and its validity records
+    _assert_data_content( caller, data ){
+        assert.ok( data, caller+' data is required' );
+        assert.ok( data.entity && data.entity instanceof ReactiveVar, caller+' data.entity is expected to be set as a ReactiveVar, got '+data.entity );
+        assert.ok( data.entity.DYN && _.isObject( data.entity.DYN ), caller+' data.entity.DYN is expected to be set as a Object, got '+data.entity.DYN );
+        assert.ok( data.entity.DYN.records && _.isArray( data.entity.DYN.records ), caller+' data.entity.DYN.records is expected to be set as an Array, got '+data.entity.DYN.records );
+        data.entity.DYN.records.forEach(( it ) => {
+            assert.ok( it && it instanceof ReactiveVar, caller+' each record is expected to be a ReactiveVar, got '+it );
+        });
+        assert.ok( _.isNumber( data.index ) && data.index >= 0, caller+' data.index is expected to be a positive or zero integer, got '+data.index );
     },
 
     // if date is set, it must be valid - it is expected in yyyy-mm-dd format
     //  data comes from the edition panel, passed-in through the Forms.Checker instance
     async effectEnd( value, data, opts={} ){
-        Validity.checks._assert_data_itemrv( 'Validity.checks.effectEnd()', data );
-        const item = data.item.get();
+        Validity.checks._assert_data_content( 'Validity.checks.effectEnd()', data );
+        const item = data.entity.get().DYN.records[data.index].get();
         return Promise.resolve( null )
             .then(() => {
                 if( opts.update !== false ){
                     item.effectEnd = value ? new Date( value ) : null;
-                    data.item.set( item );
+                    data.entity.get().DYN.records[data.index].set( item );
                 }
-                const msg = Validity.checkEnd( data.entity.get().DYN.records, data.item.get());
+                const msg = Validity.checkEnd( data.entity.get().DYN.records, item );
                 return msg ? new TM.TypedMessage({
                     level: TM.MessageLevel.C.ERROR,
                     message: msg
@@ -36,13 +41,13 @@ Validity.checks = {
     },
 
     async effectStart( value, data, opts={} ){
-        Validity.checks._assert_data_itemrv( 'Validity.checks.effectStart()', data );
-        const item = data.item.get();
+        Validity.checks._assert_data_content( 'Validity.checks.effectStart()', data );
+        const item = data.entity.get().DYN.records[data.index].get();
         return Promise.resolve( null )
             .then(() => {
                 if( opts.update !== false ){
                     item.effectStart = value ? new Date( value ) : null;
-                    data.item.set( item );
+                    data.entity.get().DYN.records[data.index].set( item );
                 }
                 const msg = Validity.checkStart( data.entity.get().DYN.records, data.item.get());
                 return msg ? new TM.TypedMessage({

@@ -63,16 +63,16 @@ Template.ValidityTabbed.onCreated( function(){
         //  note that the list of tabs only depends of the validity periods - so we also keep the last periods array
         prevPeriods: [],
         buildTabs( entity ){
+            //console.debug( 'buildTabs', entity, entity.DYN.records.length );
             let tabs = [];
             let dataContext = Template.currentData();
             for( let i=0 ; i<entity.DYN.records.length ; ++i ){
-                const record = entity.DYN.records[i];
                 tabs.push({
-                    navLabel: self.PCK.itemLabel( record.get(), i ),
+                    navLabel: self.PCK.itemLabel( entity.DYN.records[i].get(), i ),
                     paneTemplate: Template.currentData().template,
                     paneData: {
                         ...dataContext,
-                        record: record
+                        index: i
                     }
                 });
             }
@@ -140,7 +140,7 @@ Template.ValidityTabbed.onCreated( function(){
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index-1, 1 );
-            entity.DYN.records[index-1][this.startField] = removed[0][this.startField];
+            entity.DYN.records[index-1].get()[this.startField] = removed[0].get()[this.startField];
             entityRv.set( entity );
             self.PCK.tabbedActivate( index-1 );
         },
@@ -152,7 +152,7 @@ Template.ValidityTabbed.onCreated( function(){
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index+1, 1 );
-            entity.DYN.records[index][this.endField] = removed[0][this.endField];
+            entity.DYN.records[index].get()[this.endField] = removed[0].get()[this.endField];
             entityRv.set( entity );
             self.PCK.tabbedActivate( index );
         },

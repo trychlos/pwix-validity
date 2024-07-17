@@ -1,7 +1,7 @@
 /*
  * pwix:validity/src/client/components/dtValidityDate/dtValidityDate.js
  *
- * This template is used to display a date.
+ * This template can be used to display a date in a tabular display.
  * 
  * Parms:
  * - date: the date to be displayed as a Date object
