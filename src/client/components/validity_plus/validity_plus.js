@@ -2,6 +2,9 @@
  * /imports/organization/contents/validity_plus/validity_plus.js
  *
  * Validities 'plus' button'.
+ * It has two usages:
+ * 1. called with a 'holes' ReactiveVar, the button will open a dropdown menu allowing the user to select one if the holes period
+ * 2. called with a 'period' object, the button will directly call the callback with this period.
  *
  * Parms:
  * - classes: the classes to be added to be the button

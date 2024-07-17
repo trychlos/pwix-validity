@@ -70,7 +70,7 @@ Template.validity_panel.helpers({
     parmsValidities( p ){
         return {
             ...this,
-            classes: 'btn btn-sm btn-outline-secondary',
+            classes: 'btn btn-sm btn-outline-primary',
             period: p
         };
     }

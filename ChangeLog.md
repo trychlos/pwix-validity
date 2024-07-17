@@ -15,6 +15,7 @@
     - Fix '+' validity nav
     - Fix record informations
     - Fix dropdowns stylesheet
+    - Fix validity plus dropdown action
 
 ### 1.0.0
 
