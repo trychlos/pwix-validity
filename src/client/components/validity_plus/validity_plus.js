@@ -1,5 +1,5 @@
 /*
- * /imports/organization/contents/validity_plus/validity_plus.js
+ * pwix:validity/src/client/components/validity_plus/validity_plus.js
  *
  * Validities 'plus' button'.
  * It has two usages:

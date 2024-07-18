@@ -25,7 +25,7 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import '../validity_band/validity_band.js';
-import '../validity_panel/validity_panel.js';
+import '../validities_panel/validities_panel.js';
 import '../validity_plus/validity_plus.js';
 import '../ValidityFieldset/ValidityFieldset.js';
 
@@ -39,7 +39,7 @@ Template.ValiditiesTabbed.onCreated( function(){
         addons: [
             {
                 tab_label: 'tab.holes',
-                tab_panel: 'validity_panel'
+                tab_panel: 'validities_panel'
             }
         ],
 

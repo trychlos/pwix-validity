@@ -1,5 +1,5 @@
 /*
- * /imports/organization/contents/validity_panel/validity_panel.js
+ * pwix:validity/src/client/components/validities_panel/validities_panel.js
  *
  * Validities panel.
  * It shows the available validity periods.
@@ -13,9 +13,9 @@
 import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import './validity_panel.html';
+import './validities_panel.html';
 
-Template.validity_panel.helpers({
+Template.validities_panel.helpers({
 
     // set the period array as the data
     btnData( p ){
