@@ -212,7 +212,7 @@ Available both on the client and the server.
 
 ### Blaze components
 
-#### `ValidityTabbed`
+#### `ValiditiesTabbed`
 
 A `Tabbed`-derived component which let the application manage validity records of an entity. Each record is displayed in its own pane, whose name is built from start and end effect dates.
 
@@ -228,7 +228,7 @@ The expected data context is:
 
     The record panes will receive their data context as:
 
-    - the data context itself passed to `ValidityTabbed` (and, notably, the `entity` ReactiveVar),
+    - the data context itself passed to `ValiditiesTabbed` (and, notably, the `entity` ReactiveVar),
 
     - `index`: the index in the `DYN.records` array of the record this pane is expected to manage.
 

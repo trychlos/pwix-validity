@@ -47,7 +47,7 @@ function configure( api ){
     _use( 'tracker' );
     api.addFiles( 'src/client/components/dtValidityDate/dtValidityDate.js', 'client' );
     api.addFiles( 'src/client/components/ValidityFieldset/ValidityFieldset.js', 'client' );
-    api.addFiles( 'src/client/components/ValidityTabbed/ValidityTabbed.js', 'client' );
+    api.addFiles( 'src/client/components/ValiditiesTabbed/ValiditiesTabbed.js', 'client' );
 }
 
 // NPM dependencies are checked in /src/server/js/check_npms.js

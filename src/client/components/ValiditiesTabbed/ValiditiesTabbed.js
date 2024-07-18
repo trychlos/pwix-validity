@@ -1,10 +1,10 @@
 /*
- * pwix:validity/src/client/components/ValidityTabbed/ValidityTabbed.js
+ * pwix:validity/src/client/components/ValiditiesTabbed/ValiditiesTabbed.js
  *
  * Validities tabs manager: run the specified panel inside of our own tabbed component.
  * We manage here one tab per validity records, plus a 'availability' tab which shows available validity periods, plus an 'add' button.
  *
- * This top ValidityTabbed component have one tab per validity period, each of these validity tabs itself
+ * This top ValiditiesTabbed component have one tab per validity period, each of these validity tabs itself
  *  containing all the properties for the edited entity, and so (in the case of an organization for example), several
  *  organization tabs.
  * When needed, validity tabs periods can be identified through the tab identifier allocated and advertized by the Tabbed component.
@@ -29,9 +29,9 @@ import '../validity_panel/validity_panel.js';
 import '../validity_plus/validity_plus.js';
 import '../ValidityFieldset/ValidityFieldset.js';
 
-import './ValidityTabbed.html';
+import './ValiditiesTabbed.html';
 
-Template.ValidityTabbed.onCreated( function(){
+Template.ValiditiesTabbed.onCreated( function(){
     const self = this;
     //console.debug( this );
 
@@ -57,11 +57,14 @@ Template.ValidityTabbed.onCreated( function(){
         holes: new ReactiveVar( [], _.isEqual ),
         tabs: new ReactiveVar( [], ( a, b ) => { return self.PCK.compareTabs( a, b ); }),
 
+        // whether this view in on a destroy way
+        destroying: false,
+
         // build the list of tabs
         //  note that the list of tabs only depends of the validity periods - so we also keep the last periods array
         prevPeriods: [],
         buildTabs( entity ){
-            //console.debug( 'buildTabs', entity, entity.DYN.records.length );
+            console.debug( 'buildTabs', entity, 'length', entity.DYN.records.length );
             let tabs = [];
             let dataContext = Template.currentData();
             for( let i=0 ; i<entity.DYN.records.length ; ++i ){
@@ -138,6 +141,7 @@ Template.ValidityTabbed.onCreated( function(){
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index-1, 1 );
+            console.debug( 'removing', removed );
             entity.DYN.records[index-1].get()[this.startField] = removed[0].get()[this.startField];
             entityRv.set( entity );
             self.PCK.tabbedActivate( index-1 );
@@ -150,6 +154,7 @@ Template.ValidityTabbed.onCreated( function(){
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index+1, 1 );
+            console.debug( 'removing', removed );
             entity.DYN.records[index].get()[this.endField] = removed[0].get()[this.endField];
             entityRv.set( entity );
             self.PCK.tabbedActivate( index );
@@ -215,8 +220,8 @@ Template.ValidityTabbed.onCreated( function(){
 
         // trigger an event to our coreTabbedTemplate
         tabbbedTrigger( event, data ){
-            const tabbed = self.$( '.ValidityTabbed > .tabbed-template' ).data( 'tabbed-id' );
-            self.$( '.ValidityTabbed > .tabbed-template' ).trigger( event, {
+            const tabbed = self.$( '.ValiditiesTabbed > .tabbed-template' ).data( 'tabbed-id' );
+            self.$( '.ValiditiesTabbed > .tabbed-template' ).trigger( event, {
                 ...data,
                 tabbedId: tabbed
             });
@@ -265,25 +270,36 @@ Template.ValidityTabbed.onCreated( function(){
     });
 });
 
-Template.ValidityTabbed.onRendered( function(){
+Template.ValiditiesTabbed.onRendered( function(){
     const self = this;
 
     // set events target here if we run inside of a modal
-    const $modal = self.$( '.ValidityTabbed' ).closest( '.modal-content' );
+    const $modal = self.$( '.ValiditiesTabbed' ).closest( '.modal-content' );
     if( $modal && $modal.length ){
-        Modal.set({ target: self.$( '.ValidityTabbed' ) });
+        Modal.set({ target: self.$( '.ValiditiesTabbed' ) });
     }
 
     // publish the edited reactive var (once)
-    self.$( '.ValidityTabbed' ).trigger( 'validity-edited-rv', { edited: Template.currentData().entity });
+    self.$( '.ValiditiesTabbed' ).trigger( 'validity-edited-rv', { edited: Template.currentData().entity });
 
     // setup default active tab to the closest record
     const res = Validity.closest( Template.currentData().entity.get());
     self.PCK.tabbedActivate( res.index );
 
+    // track the dynamically removed validity periods (aka panes)
+    self.autorun(() => {
+        const destroying = !Template.currentData() || Template.currentData().index >= Template.currentData().entity.get().DYN.records.length;
+        if( destroying ){
+            console.debug( 'destroying', destroying, this );
+        }
+        if( 0 && self.TM.destroying && self.view.isRendered ){
+            console.debug( 'removing pane from the DOM' );
+            $( '#tabbed-p-'+self.TM.tabId.get()+' .c-record-tabbed' ).remove();
+        }
+    });
 });
 
-Template.ValidityTabbed.helpers({
+Template.ValiditiesTabbed.helpers({
     // whether we manage validities
     haveValidities(){
         return _.isBoolean( this.withValidities ) ? this.withValidities : true;
@@ -315,7 +331,7 @@ Template.ValidityTabbed.helpers({
     }
 });
 
-Template.ValidityTabbed.events({
+Template.ValiditiesTabbed.events({
     'click .nav-link .js-mergeleft'( event, instance ){
         //console.debug( event );
         const index = instance.$( event.currentTarget ).closest( 'button.nav-link' ).data( 'tabbed-index' );
