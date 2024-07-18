@@ -2,9 +2,9 @@
 
 ## ChangeLog
 
-### 1.1.0-rc
+### 1.1.0
 
-    Release date:
+    Release date: 2024- 7-18
 
     - Improve README
     - Add french translation
@@ -27,4 +27,4 @@
 
 ---
 P. Wieser
-- Last updated on 2024, Jun. 27th
+- Last updated on 2024, Jul. 18th

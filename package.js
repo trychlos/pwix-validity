@@ -1,6 +1,6 @@
 Package.describe({
     name: 'pwix:validity',
-    version: '1.1.0-rc',
+    version: '1.1.0',
     summary: 'A Meteor package to manage validities',
     git: 'https://github.com/trychlos/pwix-validity.git',
     documentation: 'README.md'
