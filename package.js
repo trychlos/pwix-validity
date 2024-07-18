@@ -46,8 +46,8 @@ function configure( api ){
     _use( 'tmeasday:check-npm-versions@1.0.2 || 2.0.0-beta.0', 'server' );
     _use( 'tracker' );
     api.addFiles( 'src/client/components/dtValidityDate/dtValidityDate.js', 'client' );
-    api.addFiles( 'src/client/components/ValidityFieldset/ValidityFieldset.js', 'client' );
     api.addFiles( 'src/client/components/ValiditiesTabbed/ValiditiesTabbed.js', 'client' );
+    api.addFiles( 'src/client/components/ValidityFieldset/ValidityFieldset.js', 'client' );
 }
 
 // NPM dependencies are checked in /src/server/js/check_npms.js

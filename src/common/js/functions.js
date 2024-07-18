@@ -27,12 +27,12 @@ Validity._check_against = function( array, period, opts={} ){
     let ok = true;
 
     //console.debug( 'array', array );
-    console.debug( 'period', period.start, period.end );
+    //console.debug( 'period', period.start, period.end );
     array.every(( it ) => {
         const record = it.get();
-        console.debug( 'record', record[startField], record[endField],
-            'is_same_period', this._is_same_period( [ period.start, period.end ], [ record[startField], record[endField] ] ),
-            'overlap', this._intervals_overlap( [ period.start, period.end ], [ record[startField], record[endField] ] ));
+        //console.debug( 'record', record[startField], record[endField],
+        //    'is_same_period', this._is_same_period( [ period.start, period.end ], [ record[startField], record[endField] ] ),
+        //    'overlap', this._intervals_overlap( [ period.start, period.end ], [ record[startField], record[endField] ] ));
         if( !this._is_same_period( [ period.start, period.end ], [ record[startField], record[endField] ] )){
             const overlap = this._intervals_overlap( [ period.start, period.end ], [ record[startField], record[endField] ] );
             ok &&= ( overlap === -1 );
@@ -377,14 +377,16 @@ Validity.englobingPeriodByRecords = function( records, opts={} ){
 /**
  * @summary Find holes, i.e. period of times which are not in a validity period
  * @param {Array} array an array of objects which may contain start and end effect dates
- * @param {Object} opts an optional options object
+ * @param {Object} opts an optional options object with following keys:
+ *  - start, the name of the field which contains the starting effect date, defaulting to configured value
+ *  - end, the name of the field which contains the ending effect date, defaulting to configured value
  * @returns {Array} an array, maybe empty, of objects with following keys:
  *  - start: the starting uncovered date, may be unset for infinite
  *  - end: the ending uncovered date, may be unset for infinite
  */
 Validity.holesByRecords = function( array, opts={} ){
-    const startField = Validity.configure().effectStart;
-    const endField = Validity.configure().effectEnd;
+    const startField = opts.start || Validity.configure().effectStart;
+    const endField = opts.end || Validity.configure().effectEnd;
 
     let holes = [];
 

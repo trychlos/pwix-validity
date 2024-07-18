@@ -13,9 +13,10 @@ Validity.checks = {
     _assert_data_content( caller, data ){
         assert.ok( data, caller+' data is required' );
         assert.ok( data.entity && data.entity instanceof ReactiveVar, caller+' data.entity is expected to be set as a ReactiveVar, got '+data.entity );
-        assert.ok( data.entity.DYN && _.isObject( data.entity.DYN ), caller+' data.entity.DYN is expected to be set as a Object, got '+data.entity.DYN );
-        assert.ok( data.entity.DYN.records && _.isArray( data.entity.DYN.records ), caller+' data.entity.DYN.records is expected to be set as an Array, got '+data.entity.DYN.records );
-        data.entity.DYN.records.forEach(( it ) => {
+        const entity = data.entity.get();
+        assert.ok( entity.DYN && _.isObject( entity.DYN ), caller+' data.entity.DYN is expected to be set as a Object, got '+entity.DYN );
+        assert.ok( entity.DYN.records && _.isArray( entity.DYN.records ), caller+' data.entity.DYN.records is expected to be set as an Array, got '+entity.DYN.records );
+        entity.DYN.records.forEach(( it ) => {
             assert.ok( it && it instanceof ReactiveVar, caller+' each record is expected to be a ReactiveVar, got '+it );
         });
         assert.ok( _.isNumber( data.index ) && data.index >= 0, caller+' data.index is expected to be a positive or zero integer, got '+data.index );

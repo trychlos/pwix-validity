@@ -24,8 +24,9 @@ import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import '../validity_band/validity_band.js';
 import '../validities_panel/validities_panel.js';
+import '../validity_band/validity_band.js';
+import '../validity_pane/validity_pane.js';
 import '../validity_plus/validity_plus.js';
 import '../ValidityFieldset/ValidityFieldset.js';
 
@@ -64,13 +65,13 @@ Template.ValiditiesTabbed.onCreated( function(){
         //  note that the list of tabs only depends of the validity periods - so we also keep the last periods array
         prevPeriods: [],
         buildTabs( entity ){
-            console.debug( 'buildTabs', entity, 'length', entity.DYN.records.length );
+            //console.debug( 'buildTabs', entity, 'length', entity.DYN.records.length );
             let tabs = [];
             let dataContext = Template.currentData();
             for( let i=0 ; i<entity.DYN.records.length ; ++i ){
                 tabs.push({
                     navLabel: self.PCK.itemLabel( entity.DYN.records[i].get(), i ),
-                    paneTemplate: Template.currentData().template,
+                    paneTemplate: 'validity_pane',
                     paneData: {
                         ...dataContext,
                         index: i
@@ -141,7 +142,7 @@ Template.ValiditiesTabbed.onCreated( function(){
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index-1, 1 );
-            console.debug( 'removing', removed );
+            //console.debug( 'removing', removed );
             entity.DYN.records[index-1].get()[this.startField] = removed[0].get()[this.startField];
             entityRv.set( entity );
             self.PCK.tabbedActivate( index-1 );
@@ -154,7 +155,7 @@ Template.ValiditiesTabbed.onCreated( function(){
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index+1, 1 );
-            console.debug( 'removing', removed );
+            //console.debug( 'removing', removed );
             entity.DYN.records[index].get()[this.endField] = removed[0].get()[this.endField];
             entityRv.set( entity );
             self.PCK.tabbedActivate( index );
@@ -285,18 +286,6 @@ Template.ValiditiesTabbed.onRendered( function(){
     // setup default active tab to the closest record
     const res = Validity.closest( Template.currentData().entity.get());
     self.PCK.tabbedActivate( res.index );
-
-    // track the dynamically removed validity periods (aka panes)
-    self.autorun(() => {
-        const destroying = !Template.currentData() || Template.currentData().index >= Template.currentData().entity.get().DYN.records.length;
-        if( destroying ){
-            console.debug( 'destroying', destroying, this );
-        }
-        if( 0 && self.TM.destroying && self.view.isRendered ){
-            console.debug( 'removing pane from the DOM' );
-            $( '#tabbed-p-'+self.TM.tabId.get()+' .c-record-tabbed' ).remove();
-        }
-    });
 });
 
 Template.ValiditiesTabbed.helpers({
