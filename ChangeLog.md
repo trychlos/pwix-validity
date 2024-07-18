@@ -6,7 +6,7 @@
 
     Release date: 
 
-    - 
+    - Fix checks.effectStart() function
 
 ### 1.1.0
 

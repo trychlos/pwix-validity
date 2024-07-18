@@ -52,7 +52,7 @@ Validity.checks = {
                     item[startField] = value ? new Date( value ) : null;
                     data.entity.get().DYN.records[data.index].set( item );
                 }
-                const msg = Validity.checkStart( data.entity.get().DYN.records, data.item.get());
+                const msg = Validity.checkStart( data.entity.get().DYN.records, item );
                 return msg ? new TM.TypedMessage({
                     level: TM.MessageLevel.C.ERROR,
                     message: msg

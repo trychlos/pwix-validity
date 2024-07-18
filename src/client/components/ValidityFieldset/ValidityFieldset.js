@@ -38,7 +38,8 @@ Template.ValidityFieldset.helpers({
         return {
             name: 'validity-end',
             value: this.endDate,
-            defaultValue: def
+            defaultValue: def,
+            withHelp: true
         };
     },
 
@@ -54,7 +55,8 @@ Template.ValidityFieldset.helpers({
         return {
             name: 'validity-start',
             value: this.startDate,
-            defaultValue: def
+            defaultValue: def,
+            withHelp: true
         };
     }
 });
