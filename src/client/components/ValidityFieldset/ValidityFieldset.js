@@ -1,5 +1,5 @@
 /*
- * /imports/client/components/ValidityFieldset/ValidityFieldset.js
+ * pwix:validity/src/client/components/ValidityFieldset/ValidityFieldset.js
  *
  * Parms:
  * - startDate: the starting effect date (as a Date), or null
