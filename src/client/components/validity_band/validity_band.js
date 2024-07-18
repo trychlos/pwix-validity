@@ -12,10 +12,6 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import './validity_band.html';
 
-Template.validity_band.onCreated( function(){
-    const self = this;
-});
-
 Template.validity_band.onRendered( function(){
     const self = this;
 

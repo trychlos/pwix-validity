@@ -17,6 +17,7 @@
     - Fix dropdowns stylesheet
     - Fix validity plus dropdown action
     - Configure effectStart and effectEnd field names (todo #2)
+    - Introduce validity_pane new component to better handle removed validity periods
 
 ### 1.0.0
 
