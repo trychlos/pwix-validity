@@ -27,9 +27,9 @@ Validity.i18n = {
                 start_line: 'La date de début de la période de validité (depuis l\'infini si nulle)'
             },
             panel: {
-                confirm_mergeleft: 'Fusionner avec la période précédente signifie conserver ces données affichées, tout en consolidant les périodes de validité. Etes-vous sûr ?',
-                confirm_mergeright: 'Fusionner avec la période suivante signifie conserver ces données affichées, tout en consolidant les périodes de validité. Etes-vous sûr ?',
-                confirm_remove: 'Vous êtes sur le point de supprimer une période de validité. Etes-vous sûr ?',
+                confirm_mergeleft: 'Fusionner avec la période précédente signifie conserver ces données affichées, tout en consolidant les périodes de validité.<br />Etes-vous sûr ?',
+                confirm_mergeright: 'Fusionner avec la période suivante signifie conserver ces données affichées, tout en consolidant les périodes de validité.<br />Etes-vous sûr ?',
+                confirm_remove: 'Vous êtes sur le point de supprimer une période de validité.<br />Etes-vous sûr ?',
                 end_legend: 'Valide jusqu\'au',
                 from: 'Depuis le %s',
                 fromto: 'Du %s au %s',

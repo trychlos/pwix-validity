@@ -8,6 +8,7 @@
 
     - Fix checks.effectStart() function
     - Have a title for all bootbox
+    - Homogeneize the confirmation boxes
 
 ### 1.1.0
 
