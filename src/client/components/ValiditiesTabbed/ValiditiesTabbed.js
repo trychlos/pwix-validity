@@ -324,7 +324,10 @@ Template.ValiditiesTabbed.events({
     'click .nav-link .js-mergeleft'( event, instance ){
         //console.debug( event );
         const index = instance.$( event.currentTarget ).closest( 'button.nav-link' ).data( 'tabbed-index' );
-        Bootbox.confirm( pwixI18n.label( I18N, 'panel.confirm_mergeleft' ), function( ret ){
+        Bootbox.confirm({
+            title: pwixI18n.label( I18N, 'panel.title_mergeleft' ),
+            message: pwixI18n.label( I18N, 'panel.confirm_mergeleft' )
+        }, function( ret ){
             if( ret ){
                 instance.PCK.mergeLeft( index );
             }
@@ -334,7 +337,10 @@ Template.ValiditiesTabbed.events({
     'click .nav-link .js-mergeright'( event, instance ){
         //console.debug( event );
         const index = instance.$( event.currentTarget ).closest( 'button.nav-link' ).data( 'tabbed-index' );
-        Bootbox.confirm( pwixI18n.label( I18N, 'panel.confirm_mergeright' ), function( ret ){
+        Bootbox.confirm({
+            title: pwixI18n.label( I18N, 'panel.title_mergeright' ),
+            message: pwixI18n.label( I18N, 'panel.confirm_mergeright' )
+        }, function( ret ){
             if( ret ){
                 instance.PCK.mergeRight( index );
             }
@@ -350,7 +356,10 @@ Template.ValiditiesTabbed.events({
     'click .nav-link .js-remove'( event, instance ){
         //console.debug( event );
         const index = instance.$( event.currentTarget ).closest( 'button.nav-link' ).data( 'tabbed-index' );
-        Bootbox.confirm( pwixI18n.label( I18N, 'panel.confirm_remove' ), function( ret ){
+        Bootbox.confirm({
+            title: pwixI18n.label( I18N, 'panel.title_remove' ),
+            message: pwixI18n.label( I18N, 'panel.confirm_remove' )
+        }, function( ret ){
             if( ret ){
                 instance.PCK.removePeriod( index );
             }

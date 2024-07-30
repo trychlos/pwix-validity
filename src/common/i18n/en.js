@@ -39,6 +39,9 @@ Validity.i18n = {
                     +'You can try to define a new one by decreasing some registered validity period(s).',
                 text_one: 'The following periods are not covered by any validity record.<br />'
                     +'If this is not what you want, you have to increase some validity periods.',
+                title_mergeleft: 'Merging with previous period',
+                title_mergeright: 'Merging with next period',
+                title_remove: 'Removing a period',
                 to: 'To %s'
             },
             plus: {

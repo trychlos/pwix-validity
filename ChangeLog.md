@@ -7,6 +7,7 @@
     Release date: 
 
     - Fix checks.effectStart() function
+    - Have a title for all bootbox
 
 ### 1.1.0
 
