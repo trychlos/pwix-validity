@@ -2,9 +2,9 @@
 
 ## ChangeLog
 
-### 1.1.1-rc
+### 1.1.1
 
-    Release date: 
+    Release date: 2024- 9-13
 
     - Fix checks.effectStart() function
     - Have a title for all bootbox
@@ -35,4 +35,4 @@
 
 ---
 P. Wieser
-- Last updated on 2024, Jul. 18th
+- Last updated on 2024, Sep. 13th
