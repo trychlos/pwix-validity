@@ -6,7 +6,7 @@
 
     Release date: 
 
-    - 
+    - Fix the type definition of effectStart and effectEnd fields
 
 ### 1.1.1
 
