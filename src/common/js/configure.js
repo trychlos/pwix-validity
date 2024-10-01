@@ -8,7 +8,6 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { Tracker } from 'meteor/tracker';
 
 let _conf = {};
-
 Validity._conf = new ReactiveVar( _conf );
 
 Validity._defaults = {
@@ -25,7 +24,7 @@ Validity._defaults = {
  */
 Validity.configure = function( o ){
     if( o && _.isObject( o )){
-        _.merge( _conf, Validity._defaults, o );
+        _conf = _.merge( Validity._defaults, _conf, o );
         Validity._conf.set( _conf );
         // be verbose if asked for
         if( _conf.verbosity & Validity.C.Verbose.CONFIGURE ){
@@ -36,7 +35,7 @@ Validity.configure = function( o ){
     return Validity._conf.get();
 }
 
-_.merge( _conf, Validity._defaults );
+_conf = _.merge( {}, Validity._defaults );
 Validity._conf.set( _conf );
 
 // make sure effectStart and effectEnd field names are set
