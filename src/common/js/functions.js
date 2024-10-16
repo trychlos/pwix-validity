@@ -375,6 +375,34 @@ Validity.englobingPeriodByRecords = function( records, opts={} ){
 };
 
 /**
+ * @summary Transform an object as an entity with its DYN sub-object to an object as an { entity, record } description
+ * @param {Object} object
+ * @param {Object} opts an optional options object with following keys:
+ *  - index: the index of the preferred record, defaulting to the closest
+ * @returns {Object} the { entity, record } canonical object - another object in all cases
+ */
+Validity.getEntityRecord = function( object, opts={} ){
+    let out = { ...object };
+
+    if( out._id && out.DYN && out.DYN.records && out.DYN.closest ){
+        if( out.entity || out.record ){
+            console.warn( 'unexpected object data, seems to have both entity with DYN and { entity, record } format', out );
+        }
+        const entity = { ...object };
+        delete entity.DYN;
+        const record = opts.index === undefined ? out.DYN.closest : out.DYN.records[opts.index];
+        out = { entity: entity, record: record };
+
+    } else if( out.entity && out.record ){
+        if( out._id || out.DYN ){
+            console.warn( 'unexpected object data, seems to have both entity with DYN and { entity, record } format', out );
+        }
+    }
+
+    return out;
+};
+
+/**
  * @summary Find holes, i.e. period of times which are not in a validity period
  * @param {Array} array an array of objects which may contain start and end effect dates
  * @param {Object} opts an optional options object with following keys:

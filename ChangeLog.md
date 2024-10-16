@@ -2,11 +2,11 @@
 
 ## ChangeLog
 
-### 1.1.3-rc
+### 1.2.0-rc
 
     Release date: 
 
-    - 
+    - Define new getEntityRecord() function, thus bumping minor candidate version number
 
 ### 1.1.2
 
