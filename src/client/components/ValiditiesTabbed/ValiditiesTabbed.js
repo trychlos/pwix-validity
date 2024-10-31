@@ -7,7 +7,7 @@
  * This top ValiditiesTabbed component have one tab per validity period, each of these validity tabs itself
  *  containing all the properties for the edited entity, and so (in the case of an organization for example), several
  *  organization tabs.
- * When needed, validity tabs periods can be identified through the tab identifier allocated and advertized by the Tabbed component.
+ * When needed, validity tabs periods can be identified through the tab identifier allocated and advertised by the Tabbed component.
  *
  * Parms:
  * - entity: the to-be-edited item entity, as a ReactiveVar, including a DYN.records array of ReactiveVar's - empty if new
