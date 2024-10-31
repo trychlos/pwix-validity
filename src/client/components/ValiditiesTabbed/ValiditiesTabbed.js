@@ -68,9 +68,21 @@ Template.ValiditiesTabbed.onCreated( function(){
             //console.debug( 'buildTabs', entity, 'length', entity.DYN.records.length );
             let tabs = [];
             let dataContext = Template.currentData();
+            const closest = Validity.closest( entity ).record;
+            const atdate = Validity.atDate( entity );
+
             for( let i=0 ; i<entity.DYN.records.length ; ++i ){
+                const record = entity.DYN.records[i].get();
+                let itemClasses = [];
+                if( Validity.cmpRecords( record, closest ) === 0 ){
+                    itemClasses.push( 'validity-closest' );
+                }
+                if( atdate && Validity.cmpRecords( record, atdate ) === 0 ){
+                    itemClasses.push( 'validity-atdate' );
+                }
                 tabs.push({
-                    navLabel: self.PCK.itemLabel( entity.DYN.records[i].get(), i ),
+                    navLabel: self.PCK.itemLabel( record, i ),
+                    navItemClasses: itemClasses.join( ' ' ),
                     paneTemplate: 'validity_pane',
                     paneData: {
                         ...dataContext,

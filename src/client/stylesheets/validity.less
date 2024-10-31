@@ -2,6 +2,9 @@
  * pwix:validity/src/client/stylesheets/validity.less
  */
 
+// color used both for used band and for closest nav
+@validity_color: teal;
+
 .validity-band {
     width: 100%;
     margin-top: 0.5em;
@@ -15,7 +18,7 @@
         height: inherit;
     }
     .band .used {
-        background-color: teal; //@darkteal;
+        background-color: @validity_color; //@darkteal;
         height: inherit;
     }
     .band .last {
@@ -102,6 +105,14 @@
         }
     }
     .nav-tabs {
+        li.validity-atdate {
+            //font-weight: bold;
+        }
+        li.validity-closest {
+            button {
+                color: @validity_color;
+            }
+        }
         .validity-item-label {
             .dropdown {
                 padding-left: 0.25em;
