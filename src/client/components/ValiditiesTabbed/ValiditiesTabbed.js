@@ -326,6 +326,7 @@ Template.ValiditiesTabbed.helpers({
     // defines the list of tabs to be displayed
     parmsTabbed(){
         return {
+            name: this.name || 'validities_tabbed',
             tabs: Template.instance().PCK.tabs.get(),
             navPosition: 'bottom'
         }
