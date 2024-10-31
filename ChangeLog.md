@@ -7,6 +7,7 @@
     Release date: 
 
     - Define new getEntityRecord() function, thus bumping minor candidate version number
+    - Add 'closest' and 'atdate' classes to relevant navs
 
 ### 1.1.2
 
