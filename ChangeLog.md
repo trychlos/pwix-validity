@@ -11,6 +11,7 @@
     - Minor spelling fix
     - Let the caller name the underlying Tabbed component
     - Define new ValidityCountBadge component
+    - Let the caller name the underlying Tabbed component
 
 ### 1.1.2
 
