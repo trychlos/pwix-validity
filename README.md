@@ -224,6 +224,8 @@ The expected data context is:
 
     It is expected that the document contains a `DYN` object, with a `records` key. The `DYN.records` value is an array of ReactiveVar's which each contains a validity record.
 
+- `name`: the name to be given to the underlying `Tabbed` component, defaulting to `validities_tabbed`.
+
 - `template`: the name of the Blaze template to be used for records panes.
 
     The record panes will receive their data context as:

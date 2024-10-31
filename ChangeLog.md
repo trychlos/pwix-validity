@@ -9,6 +9,7 @@
     - Define new getEntityRecord() function, thus bumping minor candidate version number
     - Add 'closest' and 'atdate' classes to relevant navs
     - Minor spelling fix
+    - Let the caller name the underlying Tabbed component
 
 ### 1.1.2
 
