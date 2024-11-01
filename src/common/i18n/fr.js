@@ -15,6 +15,9 @@ Validity.i18n = {
                 used_fromto_infinite: 'Utilisée de l\'infini à l\'infini',
                 used_to: 'Utilisée jusqu\'au %s'
             },
+            buttons: {
+                count_badge_title: 'L\'entité "%s" a %s périodes de validité',
+            },
             check: {
                 end_incompatible: 'La date de fin est incompatible avec les autres périodes de validité',
                 invalid_date: 'La date n\'est pas valide',
