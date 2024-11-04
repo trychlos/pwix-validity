@@ -1,23 +1,18 @@
 /*
- * pwix:validity/src/client/components/dtValidityCountBadge/dtValidityCountBadge.js
+ * pwix:validity/src/client/components/ValidityCountBadge/ValidityCountBadge.js
  *
  * This template is used to display the count of validity records when there are more than one.
  * 
  * Data context:
  * - item: the item as provided to the tabular display (i.e. a modified closest record)
- *   with DYN { analyze, entity, records }
- * - table: the Tabular.Table instance
+ *   or any item with a DYN { records } sub-object
  */
 
 import { pwixI18n } from 'meteor/pwix:i18n';
 
-import './dtValidityCountBadge.html';
+import './ValidityCountBadge.html';
 
-Template.dtValidityCountBadge.onRendered( function(){
-    //console.debug( this );
-});
-
-Template.dtValidityCountBadge.helpers({
+Template.ValidityCountBadge.helpers({
     // the records count
     count(){
         return this.item.DYN.records.length;

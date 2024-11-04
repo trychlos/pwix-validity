@@ -10,7 +10,7 @@
     - Add 'closest' and 'atdate' classes to relevant navs
     - Minor spelling fix
     - Let the caller name the underlying Tabbed component
-    - Define new dtValidityCountBadge component
+    - Define new ValidityCountBadge component
 
 ### 1.1.2
 
