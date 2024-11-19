@@ -2,9 +2,9 @@
 
 ## ChangeLog
 
-### 1.2.0-rc
+### 1.2.0
 
-    Release date: 
+    Release date: 2024-11-19
 
     - Define new getEntityRecord() function, thus bumping minor candidate version number
     - Add 'closest' and 'atdate' classes to relevant navs
@@ -52,4 +52,4 @@
 
 ---
 P. Wieser
-- Last updated on 2024, Oct. 4th
+- Last updated on 2024, Nov. 19th
