@@ -2,11 +2,11 @@
  * pwix:validity/src/client/components/ValiditiesTabbed/ValiditiesTabbed.js
  *
  * Validities tabs manager: run the specified panel inside of our own tabbed component.
- * We manage here one tab per validity records, plus a 'availability' tab which shows available validity periods, plus an 'add' button.
+ * We manage here one tab per validity records, plus an 'availability' tab which shows available validity periods, plus an 'add' button.
  *
  * This top ValiditiesTabbed component have one tab per validity period, each of these validity tabs itself
- *  containing all the properties for the edited entity, and so (in the case of an organization for example), several
- *  organization tabs.
+ *  containing all the properties for the edited entity, and so (in the case of a tenant for example), several
+ *  tenant tabs.
  * When needed, validity tabs periods can be identified through the tab identifier allocated and advertised by the Tabbed component.
  *
  * Parms:

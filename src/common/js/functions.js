@@ -11,6 +11,7 @@ const assert = require( 'assert' ).strict;
 
 import { DateJs } from 'meteor/pwix:date';
 import { pwixI18n } from 'meteor/pwix:i18n';
+import { Random } from 'meteor/random';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 /*
@@ -557,7 +558,7 @@ Validity.newRecord = function( entity, period, opts={} ){
         res = [ ...array ];
         let record = _.cloneDeep( array[found].get());
         // Mongo identifier
-        delete record._id;
+        record._id = Random.id();
         // collection-timestampable attributes
         delete record.createdAt;
         delete record.createdBy;

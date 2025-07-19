@@ -19,7 +19,7 @@ Template.validity_select.onCreated( function(){
     const self = this;
 
     self.APP = {
-        // the current selected organization group
+        // the current selected tenant group
         group: new ReactiveVar( null ),
         // the list of validity periods as a hash id: label
         periods: new ReactiveVar( {} ),
@@ -108,7 +108,7 @@ Template.validity_select.events({
         instance.$( '.c-validity-select' ).trigger( 'validity-select', { selected: selected });
     },
 
-    // when the organization change, invalidates the validities list
+    // when the tenant change, invalidates the validities list
     'validities-invalidate .c-validity-select'( event, instance ){
         instance.APP.group.set( null );
         instance.APP.periods.set( {} );

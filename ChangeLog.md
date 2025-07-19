@@ -2,11 +2,11 @@
 
 ## ChangeLog
 
-### 1.2.1-rc
+### 1.3.0-rc
 
     Release date: 
 
-    - 
+    - New validity record get a new identifier to be able to create several validity periods at the same time, thus bumping minor candidate version number
 
 ### 1.2.0
 
