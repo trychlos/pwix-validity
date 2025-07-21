@@ -14,16 +14,15 @@ This package defines following data:
 
 - at the entity level:
 
-    - an entity identifier
-    - an entity notes, will be common to all records
+    - nothing (at the moment)
 
 - at the record level:
 
     - an attached entity (the entity identifier above)
-    - a start date, which be null or undefined
-    - an end date, which be null or undefined.
+    - a start date, which may be null or undefined
+    - an end date, which may be null or undefined.
 
-    A starting (resp. ending) null or undefined data means from (resp. to) infinite.
+    A starting (resp. ending) null or undefined date means from (resp. to) infinite.
 
 ## Installation
 

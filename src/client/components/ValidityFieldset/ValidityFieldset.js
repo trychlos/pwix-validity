@@ -64,7 +64,6 @@ Template.ValidityFieldset.helpers({
 Template.ValidityFieldset.events({
     // date entered in DateInput component
     'date-input-data .ValidityFieldset'( event, instance, data ){
-        //console.debug( event.type, data );
         instance.PCK.dates.set( data.name, data.date );
         instance.$( '.ValidityFieldset' ).trigger( 'validity-fieldset-data', instance.PCK.dates.all());
     }

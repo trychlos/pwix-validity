@@ -7,6 +7,7 @@
     Release date: 
 
     - New validity record get a new identifier to be able to create several validity periods at the same time, thus bumping minor candidate version number
+    - Minor stylesheet modification
 
 ### 1.2.0
 
