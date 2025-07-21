@@ -8,6 +8,7 @@
 
     - New validity record get a new identifier to be able to create several validity periods at the same time, thus bumping minor candidate version number
     - Minor stylesheet modification
+    - Update dependency to pwix:date-input v2.0.0(-rc)
 
 ### 1.2.0
 
