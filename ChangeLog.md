@@ -6,7 +6,7 @@
 
     Release date: 
 
-    - 
+    - configure() now warns for unmanaged keys
 
 ### 1.3.0
 

@@ -30,6 +30,7 @@ This Meteor package is installable with the usual command:
 
 ```sh
     meteor add pwix:validity
+    meteor npm install lodash --save
 ```
 
 ## Usage

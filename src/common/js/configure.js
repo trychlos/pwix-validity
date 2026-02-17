@@ -24,11 +24,22 @@ Validity._defaults = {
  */
 Validity.configure = function( o ){
     if( o && _.isObject( o )){
-        _conf = _.merge( Validity._defaults, _conf, o );
-        Validity._conf.set( _conf );
-        // be verbose if asked for
-        if( _conf.verbosity & Validity.C.Verbose.CONFIGURE ){
-            console.log( 'pwix:validity configure() with', o );
+        // check that keys exist
+        let built_conf = {};
+        Object.keys( o ).forEach(( it ) => {
+            if( Object.keys( Validity._defaults ).includes( it )){
+                built_conf[it] = o[it];
+            } else {
+                console.warn( 'pwix:validity configure() ignore unmanaged key \''+it+'\'' );
+            }
+        });
+        if( Object.keys( built_conf ).length ){
+            _conf = _.merge( Validity._defaults, _conf, built_conf );
+            Validity._conf.set( _conf );
+            // be verbose if asked for
+            if( _conf.verbosity & Validity.C.Verbose.CONFIGURE ){
+                console.log( 'pwix:validity configure() with', built_conf );
+            }
         }
     }
     // also acts as a getter
