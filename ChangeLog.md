@@ -7,6 +7,7 @@
     Release date: 
 
     - configure() now warns for unmanaged keys
+    - Fix stylesheets to better manage tabbed nesting
 
 ### 1.3.0
 

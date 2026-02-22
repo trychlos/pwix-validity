@@ -97,6 +97,13 @@
     }
 }
 
+.validity-pane {
+    //height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 .validity-plus,
 .ValiditiesTabbed {
     a.dropdown-item {
@@ -108,6 +115,10 @@
 }
 
 .ValiditiesTabbed {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
     .tab-pane {
         // have a special display for fields which are not equals between different validity records
         .val-differents {
