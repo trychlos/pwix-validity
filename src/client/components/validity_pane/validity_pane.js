@@ -8,7 +8,11 @@
  * - index: the index of the edited record
  */
 
+import { Logger } from 'meteor/pwix:logger';
+
 import './validity_pane.html';
+
+const logger = Logger.get();
 
 Template.validity_pane.onCreated( function(){
     const self = this;
@@ -19,21 +23,21 @@ Template.validity_pane.onCreated( function(){
 
     // tracking the data context consistency
     self.autorun(() => {
-        //console.debug( 'length', Template.currentData().entity.get().DYN.records.length, 'index', Template.currentData().index );
+        //logger.debug( 'length', Template.currentData().entity.get().DYN.records.length, 'index', Template.currentData().index );
     });
 
     // track the tab identifier (a validity period)
     self.autorun(() => {
         self.TABBED.tabId = Template.currentData().tabbedTabId;
-        //console.debug( 'tabId', Template.currentData().tabbedTabId, 'index', Template.currentData().index );
+        //logger.debug( 'tabId', Template.currentData().tabbedTabId, 'index', Template.currentData().index );
     });
 
     // just stop anything when on the destroy way
     self.autorun(() => {
         const destroying = !Template.currentData() || Template.currentData().index >= Template.currentData().entity.get().DYN.records.length;
-        if( 0 && destroying && self.view.isRendered ){
-            console.debug( 'destroying', destroying, this );
-            console.debug( 'removing pane from the DOM' );
+        if( false && destroying && self.view.isRendered ){
+            logger.debug( 'destroying', destroying, this );
+            logger.debug( 'removing pane from the DOM' );
             $( '#tabbed-p-'+self.TABBED.tabId ).children().remove();
         }
     });
@@ -47,5 +51,5 @@ Template.validity_pane.helpers({
 });
 
 Template.validity_pane.onDestroyed( function(){
-    //console.debug( 'onDestroyed', this.TABBED.tabId );
+    //logger.debug( 'onDestroyed', this.TABBED.tabId );
 });

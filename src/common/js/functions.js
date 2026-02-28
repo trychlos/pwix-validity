@@ -10,9 +10,12 @@ import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
 import { DateJs } from 'meteor/pwix:date';
+import { Logger } from 'meteor/pwix:logger';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { Random } from 'meteor/random';
 import { ReactiveVar } from 'meteor/reactive-var';
+
+const logger = Logger.get();
 
 /*
  * @summary check an item vs a group of items to see if they are compatible
@@ -27,11 +30,11 @@ Validity._check_against = function( array, period, opts={} ){
 
     let ok = true;
 
-    //console.debug( 'array', array );
-    //console.debug( 'period', period.start, period.end );
+    //logger.debug( 'array', array );
+    //logger.debug( 'period', period.start, period.end );
     array.every(( it ) => {
         const record = it.get();
-        //console.debug( 'record', record[startField], record[endField],
+        //logger.debug( 'record', record[startField], record[endField],
         //    'is_same_period', this._is_same_period( [ period.start, period.end ], [ record[startField], record[endField] ] ),
         //    'overlap', this._intervals_overlap( [ period.start, period.end ], [ record[startField], record[endField] ] ));
         if( !this._is_same_period( [ period.start, period.end ], [ record[startField], record[endField] ] )){
@@ -114,7 +117,7 @@ Validity._is_same_period = function( a, b, opts ){
     const startDate2 = DateJs.toMs( b[0], DateJs.infinite.start );
     const endDate2 = DateJs.toMs( b[1], DateJs.infinite.end );
     const same = startDate1 === startDate2 && endDate1 === endDate2;
-    //console.debug( 'same_period', a, b, startDate1, endDate1, startDate2, endDate2, same );
+    //logger.debug( 'same_period', a, b, startDate1, endDate1, startDate2, endDate2, same );
     return same;
 };
 
@@ -147,7 +150,7 @@ Validity.analyzeByRecords = function( records ){
             for( let i=1 ; i<records.length ; ++i ){
                 if( records[i][it] !== value ){
                     result.diffs.push( it );
-                    //console.debug( it, '0', value, i, records[i][it], 'differents' );
+                    //logger.debug( it, '0', value, i, records[i][it], 'differents' );
                     break;
                 }
             }
@@ -250,7 +253,7 @@ Validity.atDateByRecords = function( array, opts={} ){
         }
     }
 
-    //console.debug( 'array', array, 'greater', greater, 'record', record );
+    //logger.debug( 'array', array, 'greater', greater, 'record', record );
     return record;
 };
 
@@ -438,7 +441,7 @@ Validity.getEntityRecord = function( object, opts={} ){
 
     if( out._id && out.DYN && out.DYN.records && out.DYN.closest ){
         if( out.entity || out.record ){
-            console.warn( 'unexpected object data, seems to have both entity with DYN and { entity, record } format', out );
+            logger.warn( 'getEntityRecord() unexpected object data, seems to have both entity with DYN and { entity, record } format', out );
         }
         const entity = { ...object };
         delete entity.DYN;
@@ -447,7 +450,7 @@ Validity.getEntityRecord = function( object, opts={} ){
 
     } else if( out.entity && out.record ){
         if( out._id || out.DYN ){
-            console.warn( 'unexpected object data, seems to have both entity with DYN and { entity, record } format', out );
+            logger.warn( 'getEntityRecord() unexpected object data, seems to have both entity with DYN and { entity, record } format', out );
         }
     }
 
@@ -536,7 +539,7 @@ Validity.newRecord = function( entity, period, opts={} ){
     const startField = opts.start || Validity.configure().effectStart;
     const endField = opts.end || Validity.configure().effectEnd;
     let res = null;
-    //console.debug( 'period', period, DateJs.isValid( period.start ), DateJs.isValid( period.end ));
+    //logger.debug( 'period', period, DateJs.isValid( period.start ), DateJs.isValid( period.end ));
 
     // search for the previous record (or the next one if first)
     let found = -1;
@@ -571,7 +574,7 @@ Validity.newRecord = function( entity, period, opts={} ){
         res.push( new ReactiveVar( record ));
         res.sort(( a, b ) => { return DateJs.compare( a.get()[startField], b.get()[startField ] ); });
     } else {
-        console.warn( 'unable to find a reference record', period, array, opts );
+        logger.warn( 'newRecord() unable to find a reference record', period, array, opts );
     }
     // search where has been sorted this new record
     let index = -1;
@@ -617,7 +620,7 @@ Validity.newRecord = function( entity, period, opts={} ){
     x_cmpValidities( a, b, opts={} ){
         const startField = opts.start || 'effectStart';
         const res = this.Date.compare( a[startField], b[startField ] );
-        //console.debug( a, b, res );
+        //logger.debug( a, b, res );
         return res;
     },
     */
@@ -637,8 +640,8 @@ Validity.newRecord = function( entity, period, opts={} ){
 
         const ar = Array.isArray( o ) ? o : [ o ];
         for( let i=0 ; i<ar.length ; ++i ){
-            console.debug( 'i', i, 'effectStart', ar[i][startField] );
-            console.debug( 'i', i, 'effectEnd', ar[i][endField] );
+            logger.debug( 'i', i, 'effectStart', ar[i][startField] );
+            logger.debug( 'i', i, 'effectEnd', ar[i][endField] );
         }
     },
     */
@@ -710,7 +713,7 @@ Validity.newRecord = function( entity, period, opts={} ){
             if( hasStart ){
                 cmp = ( this.Date.compare( date, record[startField] ));
                 // if date before the start of validity, then the record is in the future of the specified date
-                //console.debug( date, record[startField], cmp );
+                //logger.debug( date, record[startField], cmp );
                 if( cmp === -1 ){
                     res = +1;
                 }

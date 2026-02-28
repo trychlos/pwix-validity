@@ -57,7 +57,6 @@ Template.validities_panel.helpers({
 
     // holes
     holes(){
-        //console.debug( this.periods );
         return this.holes.get();
     },
 

@@ -20,6 +20,7 @@ const assert = require( 'assert' ).strict; // up to nodejs v16.x
 
 import { Bootbox } from 'meteor/pwix:bootbox';
 import { DateJs } from 'meteor/pwix:date';
+import { Logger } from 'meteor/pwix:logger';
 import { Modal } from 'meteor/pwix:modal';
 import { pwixI18n } from 'meteor/pwix:i18n';
 import { ReactiveVar } from 'meteor/reactive-var';
@@ -32,9 +33,11 @@ import '../ValidityFieldset/ValidityFieldset.js';
 
 import './ValiditiesTabbed.html';
 
+const logger = Logger.get();
+
 Template.ValiditiesTabbed.onCreated( function(){
     const self = this;
-    //console.debug( this );
+    //logger.debug( this );
 
     self.PCK = {
         addons: [
@@ -65,7 +68,7 @@ Template.ValiditiesTabbed.onCreated( function(){
         //  note that the list of tabs only depends of the validity periods - so we also keep the last periods array
         prevPeriods: [],
         buildTabs( entity ){
-            //console.debug( 'buildTabs', entity, 'length', entity.DYN.records.length );
+            //logger.debug( 'buildTabs', entity, 'length', entity.DYN.records.length );
             let tabs = [];
             let dataContext = Template.currentData();
             const closest = Validity.closest( entity ).record;
@@ -111,7 +114,7 @@ Template.ValiditiesTabbed.onCreated( function(){
                     newPeriodCb: self.PCK.onNewPeriod
                 }
             });
-            //console.debug( 'tabs', tabs );
+            //logger.debug( 'tabs', tabs );
             return tabs;
         },
 
@@ -154,7 +157,7 @@ Template.ValiditiesTabbed.onCreated( function(){
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index-1, 1 );
-            //console.debug( 'removing', removed );
+            //logger.debug( 'removing', removed );
             entity.DYN.records[index-1].get()[this.startField] = removed[0].get()[this.startField];
             entityRv.set( entity );
             self.PCK.tabbedActivate( index-1 );
@@ -167,7 +170,7 @@ Template.ValiditiesTabbed.onCreated( function(){
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index+1, 1 );
-            //console.debug( 'removing', removed );
+            //logger.debug( 'removing', removed );
             entity.DYN.records[index].get()[this.endField] = removed[0].get()[this.endField];
             entityRv.set( entity );
             self.PCK.tabbedActivate( index );
@@ -247,7 +250,7 @@ Template.ValiditiesTabbed.onCreated( function(){
         const entityRv = Template.currentData().entity;
         check( entityRv, ReactiveVar );
         self.PCK.entityRv = entityRv;
-        //console.debug( entityRv );
+        //logger.debug( entityRv );
         entityRv.get().DYN.records.forEach(( it ) => {
             periods.push({ start: it.get()[self.PCK.startField], end: it.get()[self.PCK.endField] });
         });
@@ -269,12 +272,12 @@ Template.ValiditiesTabbed.onCreated( function(){
 
     // track periods
     self.autorun(() => {
-        //console.debug( 'periods', self.PCK.periods.get());
+        //logger.debug( 'periods', self.PCK.periods.get());
     });
 
     // track holes
     self.autorun(() => {
-        //console.debug( 'holes', self.PCK.holes.get());
+        //logger.debug( 'holes', self.PCK.holes.get());
     });
 
     // track edited to dynamically rebuild tabs
@@ -335,7 +338,7 @@ Template.ValiditiesTabbed.helpers({
 
 Template.ValiditiesTabbed.events({
     'click .nav-link .js-mergeleft'( event, instance ){
-        //console.debug( event );
+        //logger.debug( event );
         const index = instance.$( event.currentTarget ).closest( 'button.nav-link' ).data( 'tabbed-index' );
         Bootbox.confirm({
             title: pwixI18n.label( I18N, 'panel.title_mergeleft' ),
@@ -348,7 +351,7 @@ Template.ValiditiesTabbed.events({
     },
 
     'click .nav-link .js-mergeright'( event, instance ){
-        //console.debug( event );
+        //logger.debug( event );
         const index = instance.$( event.currentTarget ).closest( 'button.nav-link' ).data( 'tabbed-index' );
         Bootbox.confirm({
             title: pwixI18n.label( I18N, 'panel.title_mergeright' ),
@@ -361,13 +364,13 @@ Template.ValiditiesTabbed.events({
     },
 
     'click .nav-link .js-miinfos'( event, instance ){
-        //console.debug( event );
+        //logger.debug( event );
         const index = instance.$( event.currentTarget ).closest( 'button.nav-link' ).data( 'tabbed-index' );
         instance.PCK.miInfo( index );
     },
 
     'click .nav-link .js-remove'( event, instance ){
-        //console.debug( event );
+        //logger.debug( event );
         const index = instance.$( event.currentTarget ).closest( 'button.nav-link' ).data( 'tabbed-index' );
         Bootbox.confirm({
             title: pwixI18n.label( I18N, 'panel.title_remove' ),

@@ -1,6 +1,6 @@
 Package.describe({
     name: 'pwix:validity',
-    version: '1.3.1-rc.0',
+    version: '1.4.0-rc.0',
     summary: 'A Meteor package to manage validities',
     git: 'https://github.com/trychlos/pwix-validity.git',
     documentation: 'README.md'
@@ -37,6 +37,7 @@ function configure( api ){
     _use( 'pwix:date-input@2.0.0-rc' );
     _use( 'pwix:forms@1.0.0-rc' );
     _use( 'pwix:i18n@1.5.0' );
+    _use( 'pwix:logger@1.0.0-rc' );
     _use( 'pwix:modal@2.0.0' );
     _use( 'pwix:tabbed@1.0.0' );
     _use( 'pwix:ui-bootstrap5@2.0.0' );

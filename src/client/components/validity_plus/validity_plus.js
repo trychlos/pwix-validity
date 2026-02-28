@@ -17,9 +17,12 @@
  */
 
 import { DateJs } from 'meteor/pwix:date';
+import { Logger } from 'meteor/pwix:logger';
 import { pwixI18n } from 'meteor/pwix:i18n';
 
 import './validity_plus.html';
+
+const logger = Logger.get();
 
 Template.validity_plus.helpers({
     // whether the button is enabled or disabled
@@ -76,7 +79,7 @@ Template.validity_plus.events({
             this.newPeriodCb( period );
             //return false; // let the menu be closed
         } else {
-            console.warn( 'no defined callback', period );
+            logger.warn( 'no defined callback', period );
         }
     },
 
@@ -86,7 +89,7 @@ Template.validity_plus.events({
                 this.newPeriodCb( this.period );
                 return false;
             } else {
-                console.warn( 'no defined callback', this.period );
+                logger.warn( 'no defined callback', this.period );
             }
         }
     }

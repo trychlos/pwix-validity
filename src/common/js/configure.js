@@ -4,8 +4,11 @@
 
 import _ from 'lodash';
 
+import { Logger } from 'meteor/pwix:logger';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Tracker } from 'meteor/tracker';
+
+const logger = Logger.get();
 
 let _conf = {};
 Validity._conf = new ReactiveVar( _conf );
@@ -30,16 +33,13 @@ Validity.configure = function( o ){
             if( Object.keys( Validity._defaults ).includes( it )){
                 built_conf[it] = o[it];
             } else {
-                console.warn( 'pwix:validity configure() ignore unmanaged key \''+it+'\'' );
+                logger.warn( 'configure() ignore unmanaged key \''+it+'\'' );
             }
         });
         if( Object.keys( built_conf ).length ){
             _conf = _.merge( Validity._defaults, _conf, built_conf );
             Validity._conf.set( _conf );
-            // be verbose if asked for
-            if( _conf.verbosity & Validity.C.Verbose.CONFIGURE ){
-                console.log( 'pwix:validity configure() with', built_conf );
-            }
+            logger.verbose({ verbosity: _conf.verbosity, against: Validity.C.Verbose.CONFIGURE }, 'configure() with', built_conf );
         }
     }
     // also acts as a getter
@@ -53,10 +53,10 @@ Validity._conf.set( _conf );
 Tracker.autorun(() => {
     const effectStart = Validity.configure().effectStart;
     if( !effectStart || !_.isString( effectStart )){
-        console.error( 'pwix:validity expects effectStart be a non empty string, got', effectStart );
+        logger.error( 'expects effectStart be a non empty string, got', effectStart );
     }
     const effectEnd = Validity.configure().effectEnd;
     if( !effectEnd || !_.isString( effectEnd )){
-        console.error( 'pwix:validity expects effectEnd be a non empty string, got', effectEnd );
+        logger.error( 'expects effectEnd be a non empty string, got', effectEnd );
     }
 });
