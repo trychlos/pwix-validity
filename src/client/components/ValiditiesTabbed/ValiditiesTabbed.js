@@ -196,9 +196,15 @@ Template.ValiditiesTabbed.onCreated( function(){
             const entityRv = self.PCK.entityRv;
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
-            const res = Validity.newRecord( entity, period, { start: self.PCK.startField, end: self.PCK.endField });
+            const res = Validity.newRecord( entity, period, { start: this.startField, end: this.endField });
+            //logger.debug( 'res', res );
             entity.DYN.records = res.records;
             entityRv.set( entity );
+            self.$( '.ValiditiesTabbed' ).trigger( 'validity-period-created', {
+                'validity-start': period.start || null,
+                'validity-end': period.end || null
+            });
+            //logger.debug( 'activating with', res );
             self.PCK.tabbedActivate( res.index );
         },
 

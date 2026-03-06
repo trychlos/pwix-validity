@@ -5,8 +5,11 @@
 import _ from 'lodash';
 const assert = require( 'assert' ).strict;
 
+import { Logger } from 'meteor/pwix:logger';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
+
+const logger = Logger.get();
 
 Validity.checks = {
     // entity is a ReactiveVar which contains the edited entity document and its validity records
@@ -27,6 +30,7 @@ Validity.checks = {
     async effectEnd( value, data, opts={} ){
         Validity.checks._assert_data_content( 'Validity.checks.effectEnd()', data );
         let item = data.entity.get().DYN.records[data.index].get();
+        //logger.debug( 'effectEnd()', item._id, 'value='+value, 'effectEnd='+item.effectEnd, 'opts=', opts );
         return Promise.resolve( null )
             .then(() => {
                 if( opts.update !== false ){
