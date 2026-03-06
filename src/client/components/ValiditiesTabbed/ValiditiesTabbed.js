@@ -8,6 +8,24 @@
  *  containing all the properties for the edited entity, and so (in the case of a tenant for example), several
  *  tenant tabs.
  * When needed, validity tabs periods can be identified through the tab identifier allocated and advertised by the Tabbed component.
+ * 
+ *     ValiditiesTabbed                  manage the validities with one pane per validity period
+ *      |
+ *      +- Tabbed
+ *      |   |
+ *      |   +- <template>                the provided template is instanciated once per edited validity period
+ *      |   |   |                        IMPORTANT NOTE:
+ *      |   |   |                        When merging or removing periods, this may be a small time slice where the template instance managihg the removed period is still
+ *      |   |   |                        alive, but do not have any more any valuable data: the template code MUST take care of manipulating valid indexes...
+ *      |   |   |
+ *      |   |   +- <anything here>
+ *      |   |   |
+ *      |   |   +- ValidityFieldset      though this is fully optional, the provided template can take advantage of displaying the ValidityFieldset component
+ *      |   |                            to let its user see and edit the validity start and end dates
+ *      |   |
+ *      |   +- validities_panel          let the user choose between free periods to create a new one
+ *      |
+ *      +- validity_band                 a visual representation of the current validity periods
  *
  * Parms:
  * - entity: the to-be-edited item entity, as a ReactiveVar, including a DYN.records array of ReactiveVar's - empty if new
@@ -162,8 +180,14 @@ Template.ValiditiesTabbed.onCreated( function(){
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index-1, 1 );
             //logger.debug( 'removing', removed );
-            entity.DYN.records[index-1].get()[this.startField] = removed[0].get()[this.startField];
+            const start = removed[0].get()[this.startField];
+            entity.DYN.records[index-1].get()[this.startField] = start;
             entityRv.set( entity );
+            self.$( '.ValiditiesTabbed' ).trigger( 'validity-period-left-merged', {
+                'validity-start': start || null,
+                'removed-validity-end': removed[0].get()[this.endField] || null,
+                'merged-validity-end': entity.DYN.records[index-1].get()[this.endField] || null
+            });
             self.PCK.tabbedActivate( index-1 );
         },
 
@@ -175,8 +199,14 @@ Template.ValiditiesTabbed.onCreated( function(){
             let entity = entityRv.get();
             const removed = entity.DYN.records.splice( index+1, 1 );
             //logger.debug( 'removing', removed );
-            entity.DYN.records[index].get()[this.endField] = removed[0].get()[this.endField];
+            const end = removed[0].get()[this.endField];
+            entity.DYN.records[index].get()[this.endField] = end;
             entityRv.set( entity );
+            self.$( '.ValiditiesTabbed' ).trigger( 'validity-period-right-merged', {
+                'removed-validity-start': removed[0].get()[this.startField] || null,
+                'merged-validity-start': entity.DYN.records[index-1].get()[this.startField] || null,
+                'validity-end': end || null
+            });
             self.PCK.tabbedActivate( index );
         },
 
@@ -217,9 +247,14 @@ Template.ValiditiesTabbed.onCreated( function(){
             const entityRv = self.PCK.entityRv;
             check( entityRv, ReactiveVar );
             let entity = entityRv.get();
+            const removed = entity.DYN.records[index].get();
             entity.DYN.records.splice( index, 1 );
             const nextActive = ( index >= entity.DYN.records.length ) ? entity.DYN.records.length-1 : index;
             entityRv.set( entity );
+            self.$( '.ValiditiesTabbed' ).trigger( 'validity-period-removed', {
+                'validity-start': removed[this.startField] || null,
+                'validity-end': removed[this.endField] || null
+            });
             self.PCK.tabbedActivate( nextActive );
         },
 
@@ -246,8 +281,8 @@ Template.ValiditiesTabbed.onCreated( function(){
 
         // trigger an event to our coreTabbedTemplate
         tabbbedTrigger( event, data ){
-            const tabbed = self.$( '.ValiditiesTabbed > .tabbed-template' ).data( 'tabbed-id' );
-            self.$( '.ValiditiesTabbed > .tabbed-template' ).trigger( event, {
+            const tabbed = self.$( '.ValiditiesTabbed > .Tabbed' ).data( 'tabbed-id' );
+            self.$( '.ValiditiesTabbed > .Tabbed' ).trigger( event, {
                 ...data,
                 tabbedId: tabbed
             });

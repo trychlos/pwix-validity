@@ -236,22 +236,51 @@ The expected data context is:
 
 - `withValidities`: whether we want deal with validity records, defaulting to `true`.
 
+The component sends following events:
+
+- `validity-period-created`, with associated data as an object with following keys:
+
+    - `validity-start`, the start validity date of the new period, as a `Date`, or null
+
+    - `validity-end`, the end validity date of the new period, as a `Date`, or null.
+
+- `validity-period-left-merged`, with associated data as an object with following keys:
+
+    - `validity-start`, the start validity date of the merged period, as a `Date`, or null
+
+    - `removed-validity-end`, the end validity date of the removed period, as a `Date`, or null
+
+    - `merged-validity-end`, the end validity date of the merged period, as a `Date`, or null.
+
+- `validity-period-right-merged`, with associated data as an object with following keys:
+
+    - `validity-start`, the start validity date, as a `Date`, or null
+
+    - `validity-end`, the end validity date, as a `Date`, or null.
+
+- `validity-period-removed`, with associated data as an object with following keys:
+
+    - `validity-start`, the start validity date of the removed period, as a `Date`, or null
+
+    - `validity-end`, the end validity date of the removed period, as a `Date`, or null.
+
 #### `ValidityFieldset`
 
 An additional component to be included by the Blaze template which manages the records documents (the `template` above) to let the user enter start and end effect dates.
 
 The expected data context is:
 
-- `startDate`: the starting effect date (as a Date), or null
+- `startDate`: the starting effect date, as a `Date`, or null
 
-- `endDate`: the ending effect date (as a Date), or null.
+- `endDate`: the ending effect date, as a `Date`, or null.
 
 Even if this component embeds itself a `DateInput` advanced date input component, and so even if you could react on `date-input-data` event, the `ValidityFieldset` components takes care of that in your place, and triggers `validity-fieldset-data` events, with data as an `Object` with following keys:
 
 - `validity-start`, a valid `Date`, or null
+
 - `validity-end`, a valid `Date`, or null.
 
-If the calling code makes use of `pwix:forms`, it can also uses `.js-start input` and `.js-end input` selectors to handle these respective fields checks.
+Note also that you could take advantage of `pwix:forms` package to let a `Forms.Checker` take all in place for you: monitor the date input fields, check them, update the item and set up the validity indicators. In that case, you can use `.js-start input` and `.js-end input` selectors to handle these respective fields definitions.
 
 ## Configuration
 
