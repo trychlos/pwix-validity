@@ -12,6 +12,7 @@
     - Align border radius on bootstrap measures
     - Extend link validity to have 'From ... to ...'
     - Define new 'validity-period-created', 'validity-period-left-merged', 'validity-period-right-merged' and 'validity-period-removed' events
+    - Improve free validity text
 
 ### 1.3.0
 

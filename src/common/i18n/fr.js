@@ -41,7 +41,8 @@ Validity.i18n = {
                 text_empty: 'Aucune période de validité n\'est actuellement disponible.<br />'
                     +'Vous pouvez en définir une nouvelle en réduisant une ou plusieurs périodes de validité actuellement enregistrée(s).',
                 text_one: 'Les périodes suivantes ne sont couvertes par aucun des enregistrements actuels.<br />'
-                    +'Si ce n\'est pas ce que vous souhaitez, vous devriez étendre certaines périodes de validité.',
+                    +'Ce n\'est en aucun cas un problème, et c\'est peut-être même ce que vous voulez réellement et cohérent avec votre cas d\'usage.<br />'
+                    +'Si ce n\'est pas ce que vous souhaitez, vous pouvez étendre la durée de validité d\'une période, ou bien définir une nouvelle période de validité.',
                 title_mergeleft: 'Fusionner avec la période précédente',
                 title_mergeright: 'Fusionner avec la période suivante',
                 title_remove: 'Supprimer une période',
