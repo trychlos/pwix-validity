@@ -134,7 +134,11 @@ Template.ValiditiesTabbed.onCreated( function(){
             if( !DateJs.isValid( it[self.PCK.startField] ) && !DateJs.isValid( it[self.PCK.endField] )){
                 res = pwixI18n.label( I18N, 'tab.full' );
             } else if( DateJs.isValid( it[self.PCK.startField] )){
-                res = pwixI18n.label( I18N, 'tab.from', DateJs.toString( it[self.PCK.startField] ));
+                if( DateJs.isValid( it[self.PCK.startField] )){
+                    res = pwixI18n.label( I18N, 'tab.from_to', DateJs.toString( it[self.PCK.startField] ), DateJs.toString( it[self.PCK.endField] ));
+                } else {
+                    res = pwixI18n.label( I18N, 'tab.from', DateJs.toString( it[self.PCK.startField] ));
+                }
             } else {
                 res = pwixI18n.label( I18N, 'tab.to', DateJs.toString( it[self.PCK.endField] ));
             }

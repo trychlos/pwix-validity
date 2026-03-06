@@ -61,6 +61,7 @@ Validity.i18n = {
             },
             tab: {
                 from: 'From %s',
+                from_to: 'From %s to %s',
                 full: 'Full validity',
                 holes: 'Availabilities',
                 mergeleft: 'Merge with previous period',

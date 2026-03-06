@@ -61,6 +61,7 @@ Validity.i18n = {
             },
             tab: {
                 from: 'Depuis le %s',
+                from_to: 'Du %s au %s',
                 full: 'Période complète',
                 holes: 'Disponibilités',
                 mergeleft: 'Fusionner avec la période précédente',
