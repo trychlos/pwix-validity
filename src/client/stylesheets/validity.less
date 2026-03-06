@@ -40,11 +40,14 @@
     .spacing {
         min-width: 0.5em;
     }
-    margin: 0.5em 0;
+
+    margin: 0;
+    margin-top: 0.5em;
+
     fieldset {
         border: 1px solid lightgray;
-        border-radius: 0.5em;
-        -moz-border-radius: 0.5em;
+        border-radius: var( --bs-border-radius );
+        -moz-border-radius: var( --bs-border-radius );
         padding: 0.5em;
     }
     fieldset legend {
@@ -143,7 +146,7 @@
             }
             a.dropdown-toggle:hover {
                 background-color: lighten( lightgray, 10% );
-                border-radius: 0.25em;
+                border-radius: var( --bs-border-radius );
             }
         }
     }

@@ -9,6 +9,7 @@
     - configure() now warns for unmanaged keys
     - Fix stylesheets to better manage tabbed nesting
     - Use pwix:logger universal logger, thus bumping minor candidate version number
+    - Align border radius on bootstrap measures
 
 ### 1.3.0
 
