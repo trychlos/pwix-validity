@@ -15,6 +15,19 @@ import { pwixI18n } from 'meteor/pwix:i18n';
 
 import './validities_panel.html';
 
+Template.validities_panel.onCreated( function(){
+    const self = this;
+
+    self.PCK = {
+        holeFrom( p ){
+            return pwixI18n.label( I18N, 'panel.from', DateJs.isValid( p.start ) ? DateJs.toString( p.start ) : pwixI18n.label( I18N, 'panel.infinite' ));
+        },
+        holeTo( p ){
+            return pwixI18n.label( I18N, 'panel.to', DateJs.isValid( p.end ) ? DateJs.toString( p.end ) : pwixI18n.label( I18N, 'panel.infinite' ));
+        }
+    };
+});
+
 Template.validities_panel.helpers({
 
     // set the period array as the data
@@ -47,12 +60,12 @@ Template.validities_panel.helpers({
 
     // starting date
     holeFrom( p ){
-        return pwixI18n.label( I18N, 'panel.from', DateJs.isValid( p.start ) ? DateJs.toString( p.start ) : pwixI18n.label( I18N, 'panel.infinite' ));
+        return Template.instance().PCK.holeFrom( p );
     },
 
     // ending date
     holeTo( p ){
-        return pwixI18n.label( I18N, 'panel.to', DateJs.isValid( p.end ) ? DateJs.toString( p.end ) : pwixI18n.label( I18N, 'panel.infinite' ));
+        return Template.instance().PCK.holeTo( p );
     },
 
     // holes
@@ -67,10 +80,16 @@ Template.validities_panel.helpers({
 
     // parms for validity_plus button
     parmsValidities( p ){
-        return {
+        const from = Template.instance().PCK.holeFrom( p ).toLowerCase();
+        const to = Template.instance().PCK.holeTo( p ).toLowerCase();
+        const title = pwixI18n.label( I18N, 'panel.button_plus', from, to );
+        const parms = {
             ...this,
             classes: 'btn btn-sm btn-outline-primary',
-            period: p
+            period: p,
+            title: title
         };
+        delete parms.holes;
+        return parms;
     }
 });

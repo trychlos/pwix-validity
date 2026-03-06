@@ -30,6 +30,7 @@ Validity.i18n = {
                 start_line: 'La date de début de la période de validité (depuis l\'infini si nulle)'
             },
             panel: {
+                button_plus: 'Définit une nouvelle période de validité %s %s',
                 confirm_mergeleft: 'Fusionner avec la période précédente signifie conserver ces données affichées, tout en consolidant les périodes de validité.<br />Etes-vous sûr ?',
                 confirm_mergeright: 'Fusionner avec la période suivante signifie conserver ces données affichées, tout en consolidant les périodes de validité.<br />Etes-vous sûr ?',
                 confirm_remove: 'Vous êtes sur le point de supprimer une période de validité.<br />Etes-vous sûr ?',

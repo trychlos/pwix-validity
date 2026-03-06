@@ -204,7 +204,7 @@ Template.ValiditiesTabbed.onCreated( function(){
             entityRv.set( entity );
             self.$( '.ValiditiesTabbed' ).trigger( 'validity-period-right-merged', {
                 'removed-validity-start': removed[0].get()[this.startField] || null,
-                'merged-validity-start': entity.DYN.records[index-1].get()[this.startField] || null,
+                'merged-validity-start': entity.DYN.records[index].get()[this.startField] || null,
                 'validity-end': end || null
             });
             self.PCK.tabbedActivate( index );

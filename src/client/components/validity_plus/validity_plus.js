@@ -14,6 +14,7 @@
  *      'period' and 'holes' should not be set together
  * - newPeriodCb: a function to be called on item selection
  *      argument will be the selection free validity period
+ * - title: an optional button title, defaulting to ''
  */
 
 import { DateJs } from 'meteor/pwix:date';
@@ -24,10 +25,29 @@ import './validity_plus.html';
 
 const logger = Logger.get();
 
+Template.validity_plus.onCreated( function(){
+    const self = this;
+    //logger.debug( this );
+
+    // make sure we have either a 'holes' OR a 'period'
+    self.autorun(() => {
+        const data = Template.currentData();
+        if( data.holes && data.period ){
+            logger.error( 'expects either a \'holes\' OR a \'period\' data, got both', data.holes, data.period, 'throwing...' );
+            throw new Error( 'Bad data type' );
+        }
+    });
+});
+
 Template.validity_plus.helpers({
     // whether the button is enabled or disabled
     btnDisabled(){
         return this.period || ( this.holes && this.holes.get().length > 0 ) ? '' : 'disabled';
+    },
+
+    // have a title when the button is used in validities panel
+    btnTitle(){
+        return this.title || '';
     },
 
     // open the dropdown menu when enabled
@@ -83,6 +103,7 @@ Template.validity_plus.events({
         }
     },
 
+    // only honors that when we have a 'period' data, so just add this period
     'click button#validity-plus-btn'( event, instance ){
         if( this.period ){
             if( this.newPeriodCb ){

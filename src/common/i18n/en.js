@@ -30,6 +30,7 @@ Validity.i18n = {
                 start_line: 'The starting date of the validity period (from infinite if nul)'
             },
             panel: {
+                button_plus: 'Define a new validity period %s %s',
                 confirm_mergeleft: 'Merging with previous period means keeping these current data, consolidating the validity periods.<br />Are you sure ?',
                 confirm_mergeright: 'Merging with next period means keeping these current data, consolidating the validity periods.<br />Are you sure ?',
                 confirm_remove: 'You are about to remove the validity period.<br />Are you sure ?',
