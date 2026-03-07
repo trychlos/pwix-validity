@@ -17,7 +17,7 @@ Template.ValidityCountBadge.helpers({
     count(){
         return this.item.DYN.records.length;
     },
-    // make the badge transparent if count is just one
+    // do not show the badge if count is just one
     classes(){
         return this.item.DYN.records.length === 1 ? 'ui-transparent' : '';
     },

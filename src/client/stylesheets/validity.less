@@ -6,11 +6,20 @@
 @validity_color: teal;
 
 .ValidityCountBadge {
-    .count {
-        padding: 0.25em 0.75em;
+    .form-rounded {
+        background-color: var( --bs-info );
         color: white;
+        border-radius: 0.8em;
+        padding: 0.05em 0.55em;
+        position: relative;
+        top: 0.195em;
+
+        p {
+            position: relative;
+            top: 0.125em;
+        }
     }
-    .count:hover {
+    .form-rounded:hover {
         cursor: default;
     }
 }
@@ -74,10 +83,10 @@
         table {
             width: 100%;
             tr:nth-child( 2n+1 ){
-                background-color: lightgray; //lighten( black, 85% );;;
+                background-color: lighten( lightgray, 15% );
             }
             tr:hover {
-                background-color: darken( lightgray, 10% ); //lighten( black, 80% );
+                background-color: lighten( lightgray, 10% );
             }
             td {
                 padding-top: 0.25em;

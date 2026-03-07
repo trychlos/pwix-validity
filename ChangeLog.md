@@ -14,6 +14,7 @@
     - Define new 'validity-period-created', 'validity-period-left-merged', 'validity-period-right-merged' and 'validity-period-removed' events
     - Improve free validity text
     - Fix validity panel and setup buttons title
+    - Validity count badge has now a rounded form (as not a button)
 
 ### 1.3.0
 
