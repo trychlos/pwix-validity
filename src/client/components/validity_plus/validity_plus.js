@@ -34,7 +34,7 @@ Template.validity_plus.onCreated( function(){
         const data = Template.currentData();
         if( data.holes && data.period ){
             logger.error( 'expects either a \'holes\' OR a \'period\' data, got both', data.holes, data.period, 'throwing...' );
-            throw new Error( 'Bad data type' );
+            throw new Error( 'Bad arguments: holes+period' );
         }
     });
 });

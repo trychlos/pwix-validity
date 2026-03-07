@@ -49,6 +49,7 @@ Validity.checks = {
     async effectStart( value, data, opts={} ){
         Validity.checks._assert_data_content( 'Validity.checks.effectStart()', data );
         let item = data.entity.get().DYN.records[data.index].get();
+        //logger.debug( 'effectStart()', item._id, 'value='+value, 'effectStart='+item.effectStart, 'opts=', opts );
         return Promise.resolve( null )
             .then(() => {
                 if( opts.update !== false ){

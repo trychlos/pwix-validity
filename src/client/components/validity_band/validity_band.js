@@ -22,10 +22,8 @@ Template.validity_band.onRendered( function(){
         const periods = Template.currentData().periods;
 
         self.$( '.validity-band .band' ).empty();
-        let $div;
 
         if( periods.length ){
-
             // build an array of all to-be-displayed parts
             let parts = [];
             for( let i=0 ; i<periods.length ; ++i ){
@@ -58,7 +56,9 @@ Template.validity_band.onRendered( function(){
             // calculate the width of each
             const width = 100 / parts.length;
             for( let i=0 ; i<parts.length ; ++i ){
-                $div = $( '<div></div' ).css({ width: width+'%' }).addClass( parts[i].class );
+                const $div = $( '<div></div>' )
+                    .css({ width: width+'%' })
+                    .addClass( parts[i].class );
 
                 switch( parts[i].class ){
                     case 'used':
@@ -81,13 +81,17 @@ Template.validity_band.onRendered( function(){
                         }
                         break;
                 }
+
                 self.$( '.validity-band .band' ).append( $div );
             }
 
         // no free period at all - have only one full used period
         } else {
-            $div = $( '<div></div' ).css({ width: '100%' }).addClass( 'used' );
-            $div.attr( 'title', pwixI18n.label( I18N, 'band.used_fromto_infinite' ));
+            const $div = $( '<div></div>' )
+                .css({ width: '100%' })
+                .addClass( 'used' )
+                .attr( 'title', pwixI18n.label( I18N, 'band.used_fromto_infinite' ));
+
             self.$( '.validity-band .band' ).append( $div );
         }
     });

@@ -61,9 +61,9 @@ Compare the fields among provided array of validity records and returns the anal
 
 Returns among the provided array of validity records the one which is valid at the `opts.date` provided date, defaulting to current local date. The returned value may be null.
 
-`opts` is an optional options object which may have following keys:
+- `opts` is an optional options object which may have following keys:
 
-- `date`: the searched validity date, as a Date object, defaulting to current date.
+    - `date`: the searched validity date, as a Date object, defaulting to current date.
 
 ##### `Validity.checkEnd( array<ReactiveVar>, item<Object>, opts<Object> )`
 
@@ -71,9 +71,9 @@ Returns among the provided array of validity records the one which is valid at t
 
 Check whether the candidate ending (resp. starting) effect date would be valid regarding the whole entity items. It may notably be invalid if inside of an already allocated validity period.
 
-`array` is an array of validity records as `ReactiveVar`'s.
+- `array` is an array of validity records as `ReactiveVar`'s.
 
-`item` is the item which holds the candidate effect date.
+- `item` is the item which holds the candidate effect date.
 
 The functions return an error message, or null if the candidate date is valid.
 
@@ -81,11 +81,11 @@ The functions return an error message, or null if the candidate date is valid.
 
 Returns the validity record the closest of the provided date as `opts.date`, defaulting to current local date.
 
-`entity` is the entity object, with its `DYN` added object, which notably includes `records`, the array of validity records as `ReactiveVar`'s.
+- `entity` is the entity object, with its `DYN` added object, which notably includes `records`, the array of validity records as `ReactiveVar`'s.
 
-`opts` is an optional options object which may have following keys:
+- `opts` is an optional options object which may have following keys:
 
-- `date`: the searched validity date, as a Date object, defaulting to current date.
+    - `date`: the searched validity date, as a Date object, defaulting to current date.
 
 The function returns its result as an object with following keys:
 
@@ -97,11 +97,11 @@ The function returns its result as an object with following keys:
 
 Returns the validity record the closest of the provided date as `opts.date`, defaulting to current local date.
 
-`records` is the array of validity records.
+- `records` is the array of validity records.
 
-`opts` is an optional options object which may have following keys:
+- `opts` is an optional options object which may have following keys:
 
-- `date`: the searched validity date, as a Date object, defaulting to current date.
+    - `date`: the searched validity date, as a Date object, defaulting to current date.
 
 The function returns its result as an object with following keys:
 
@@ -280,7 +280,7 @@ Even if this component embeds itself a `DateInput` advanced date input component
 
 - `validity-end`, a valid `Date`, or null.
 
-Note also that you could take advantage of `pwix:forms` package to let a `Forms.Checker` take all in place for you: monitor the date input fields, check them, update the item and set up the validity indicators. In that case, you can use `.js-start input` and `.js-end input` selectors to handle these respective fields definitions.
+Note also that you could take advantage of `pwix:forms` package to let a `Forms.Checker` take all in place for you: monitor the date input fields, check them, update the item and set up the validity indicators. In that case, you can use `.js-start .js-date-input` and `.js-end .js-date-input` selectors to handle these respective fields definitions.
 
 ## Configuration
 
