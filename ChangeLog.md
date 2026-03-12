@@ -15,6 +15,7 @@
     - Improve free validity text
     - Fix validity panel and setup buttons title
     - Validity count badge has now a rounded form (as not a button)
+    - Update to pwix:modal v2.5
 
 ### 1.3.0
 

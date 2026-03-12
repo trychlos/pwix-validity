@@ -38,7 +38,7 @@ function configure( api ){
     _use( 'pwix:forms@1.0.0-rc' );
     _use( 'pwix:i18n@1.5.0' );
     _use( 'pwix:logger@1.0.0-rc' );
-    _use( 'pwix:modal@2.0.0' );
+    _use( 'pwix:modal@2.5.0-rc' );
     _use( 'pwix:tabbed@1.0.0' );
     _use( 'pwix:ui-bootstrap5@2.0.0' );
     _use( 'pwix:ui-fontawesome6@1.0.0' );

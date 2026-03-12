@@ -337,7 +337,7 @@ Template.ValiditiesTabbed.onRendered( function(){
     // set events target here if we run inside of a modal
     const $modal = self.$( '.ValiditiesTabbed' ).closest( '.modal-content' );
     if( $modal && $modal.length ){
-        Modal.set({ target: self.$( '.ValiditiesTabbed' ) });
+        Modal.topmost().set({ target: self.$( '.ValiditiesTabbed' ) });
     }
 
     // publish the edited reactive var (once)
