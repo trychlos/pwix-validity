@@ -2,9 +2,9 @@
 
 ## ChangeLog
 
-### 1.4.0-rc.0
+### 1.4.0
 
-    Release date: 
+    Release date: 2026- 4- 2
 
     - configure() now warns for unmanaged keys
     - Fix stylesheets to better manage tabbed nesting
@@ -76,4 +76,4 @@
 
 ---
 P. Wieser
-- Last updated on 2026, Feb. 10th
+- Last updated on 2026, Apr. 2nd
