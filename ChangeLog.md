@@ -6,7 +6,7 @@
 
     Release date: 
 
-    - 
+    - Fix the size of the ValidityCountBadge to make different digits have the same width
 
 ### 1.4.0
 
