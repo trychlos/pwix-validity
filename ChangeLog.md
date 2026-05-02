@@ -2,6 +2,12 @@
 
 ## ChangeLog
 
+### 1.4.2-rc.0
+
+    Release date: 
+
+    - 
+
 ### 1.4.1
 
     Release date: 2026- 5- 2
