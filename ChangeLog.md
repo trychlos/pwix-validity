@@ -2,9 +2,9 @@
 
 ## ChangeLog
 
-### 1.4.1-rc.0
+### 1.4.1
 
-    Release date: 
+    Release date: 2026- 5- 2
 
     - Fix the size of the ValidityCountBadge to make different digits have the same width
 
@@ -82,4 +82,4 @@
 
 ---
 P. Wieser
-- Last updated on 2026, Apr. 2nd
+- Last updated on 2026, May. 2nd
