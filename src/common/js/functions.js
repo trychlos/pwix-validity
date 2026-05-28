@@ -431,30 +431,28 @@ Validity.englobingPeriodByRecords = function( records, opts={} ){
 
 /**
  * @summary Transform an object as an entity with its DYN sub-object to an object as an { entity, record } description
- * @param {Object} object
+ * @param {Object} input
  * @param {Object} opts an optional options object with following keys:
  *  - index: the index of the preferred record, defaulting to the closest
- * @returns {Object} the { entity, record } canonical object - another object in all cases
+ * @returns {Object} the { entity, record } canonical object - an another new object in all cases
  */
-Validity.getEntityRecord = function( object, opts={} ){
-    let out = { ...object };
-
-    if( out._id && out.DYN && out.DYN.records && out.DYN.closest ){
-        if( out.entity || out.record ){
-            logger.warn( 'getEntityRecord() unexpected object data, seems to have both entity with DYN and { entity, record } format', out );
-        }
-        const entity = { ...object };
+Validity.getEntityRecord = function( input, opts={} ){
+    // if we already have an entity and a record, the just return them
+    if( input.entity && _.isObject( input.entity ) && input.entity._id && input.record && _.isObject( input.record ) && input.record._id ){
+        const entity = { ...input };
         delete entity.DYN;
-        const record = opts.index === undefined ? out.DYN.closest : out.DYN.records[opts.index];
-        out = { entity: entity, record: record };
-
-    } else if( out.entity && out.record ){
-        if( out._id || out.DYN ){
-            logger.warn( 'getEntityRecord() unexpected object data, seems to have both entity with DYN and { entity, record } format', out );
-        }
+        return { entity, record: input.record };
     }
-
-    return out;
+    // in we have an _id and both DYN.records and DYN.closest, then return them
+    //  nonetheless honoring opts.index if specified
+    if( input._id && input.DYN && input.DYN.records && input.DYN.closest ){
+        const entity = { ...input };
+        delete entity.DYN;
+        const record = ( opts.index >= 0 && opts.index < input.DYN.records.length ) ? { ...input.DYN.records[opts.index] } : { ...input.DYN.closest };
+        return { entity, record };
+    }
+    // in all other cases, return a copy of the input
+    return { ...input };
 };
 
 /**

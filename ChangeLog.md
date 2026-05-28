@@ -6,7 +6,7 @@
 
     Release date: 
 
-    - 
+    - Fix GetEntityRecord() to accept more input
 
 ### 1.4.1
 
