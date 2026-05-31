@@ -2,9 +2,9 @@
 
 ## ChangeLog
 
-### 1.4.2-rc.0
+### 1.4.2
 
-    Release date: 
+    Release date: 2026- 5-31
 
     - Fix GetEntityRecord() to accept more input
 
@@ -88,4 +88,4 @@
 
 ---
 P. Wieser
-- Last updated on 2026, May. 2nd
+- Last updated on 2026, May. 31st
