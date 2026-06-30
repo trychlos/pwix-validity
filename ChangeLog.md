@@ -6,7 +6,7 @@
 
     Release date: 
 
-    - 
+    - Minor code reorganization to keep functions ordered by name
 
 ### 1.4.2
 

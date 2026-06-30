@@ -162,25 +162,6 @@ Validity.analyzeByRecords = function( records ){
 
 /**
  * @locus Anywhere
- * @param {Object} a a validity record
- * @param {Object} b another validity record
- * @param {Object} opts an optional options object with following keys:
- *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
- *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
- * @returns {Integer}
- *  -1 if a is before b,
- *   0 if a and b exhibit the same validity periods
- *  +1 if ais after b.
- */
-Validity.cmpRecords = function( a, b, opts={} ){
-    const startField = opts.start || Validity.configure().effectStart;
-    const endField = opts.end || Validity.configure().effectEnd;
-    // expect that the two records are valid in a same entity
-    return DateJs.compare( a[startField], b[startField ] );
-};
-
-/**
- * @locus Anywhere
  * @param {Object} entity the current entity published document, i.e. with its DYN.records array of ReactiveVar's
  * @param {Object} opts an optional options object with following keys:
  *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
@@ -388,6 +369,25 @@ Validity.closestByRecords = function( records, opts={} ){
         record: records[found],
         index: found
     };
+};
+
+/**
+ * @locus Anywhere
+ * @param {Object} a a validity record
+ * @param {Object} b another validity record
+ * @param {Object} opts an optional options object with following keys:
+ *  - start: the name of the field which contains the start date of the validity, defaulting to 'effectStart'
+ *  - end: the name of the field which contains the end date of the validity, defaulting to 'effectEnd'
+ * @returns {Integer}
+ *  -1 if a is before b,
+ *   0 if a and b exhibit the same validity periods
+ *  +1 if ais after b.
+ */
+Validity.cmpRecords = function( a, b, opts={} ){
+    const startField = opts.start || Validity.configure().effectStart;
+    const endField = opts.end || Validity.configure().effectEnd;
+    // expect that the two records are valid in a same entity
+    return DateJs.compare( a[startField], b[startField ] );
 };
 
 /**
