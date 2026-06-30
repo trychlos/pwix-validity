@@ -2,9 +2,9 @@
 
 ## ChangeLog
 
-### 1.4.3-rc.0
+### 1.4.3
 
-    Release date: 
+    Release date: 2026- 6-30
 
     - Minor code reorganization to keep functions ordered by name
 
@@ -94,4 +94,4 @@
 
 ---
 P. Wieser
-- Last updated on 2026, May. 31st
+- Last updated on 2026, Jun. 30th
