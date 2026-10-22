@@ -7,8 +7,8 @@
  */
 
 import _ from 'lodash';
-const assert = require( 'assert' ).strict;
 
+import { check, Match } from 'meteor/check';
 import { DateJs } from 'meteor/pwix:date';
 import { Logger } from 'meteor/pwix:logger';
 import { pwixI18n } from 'meteor/pwix:i18n';
@@ -131,7 +131,7 @@ Validity._is_same_period = function( a, b, opts ){
  *  - diffs: an array of the fields which do not have the same value among all records, may be empty
  */
 Validity.analyzeByRecords = function( records ){
-    assert( records && _.isArray( records ), 'expect an array of records, found '+records );
+    check( records, [Object] );
     const excludes = [ '_id' ];
 
     // compute the list of fields
@@ -171,14 +171,15 @@ Validity.analyzeByRecords = function( records ){
  *  This method is so more strict than closest().
  */
 Validity.atDate = function( entity, opts={} ){
-    let array = entity.DYN.records;
-    assert( _.isArray( array ), 'expect DYN.records be an array' );
+    check( entity, Match.ObjectIncluding({ DYN: Match.ObjectIncluding({ records: [ReactiveVar] })}));
 
     // transform the provided entity and its DYN.records array of ReactiveVar's to an simple array of record documents
+    let array = entity.DYN.records;
     let records = [];
     for( let i=0 ; i<array.length ; ++i ){
         records.push( array[i].get());
     }
+
     return this.atDateByRecords( records, opts );
 };
 
@@ -308,10 +309,10 @@ Validity.checkStart = function( array, item, opts={} ){
  *  - index: the corresponding index in the sorted array
  */
 Validity.closest = function( entity, opts={} ){
-    let array = entity.DYN.records;
-    assert( _.isArray( array ), 'expect DYN.records be an array' );
+    check( entity, Match.ObjectIncluding({ DYN: Match.ObjectIncluding({ records: [ReactiveVar] })}));
 
     // transform the provided entity and its DYN.records array of ReactiveVar's to an simple array of record documents
+    let array = entity.DYN.records;
     let records = [];
     for( let i=0 ; i<array.length ; ++i ){
         records.push( array[i].get());
@@ -331,7 +332,8 @@ Validity.closest = function( entity, opts={} ){
  *  - index: the corresponding index in the sorted array
  */
 Validity.closestByRecords = function( records, opts={} ){
-    assert( _.isArray( records ), 'expect records be an array' );
+    check( records, [Object] );
+
     const startField = opts.start || Validity.configure().effectStart;
     const endField = opts.end || Validity.configure().effectEnd;
     const date = opts.date || new Date();
@@ -532,8 +534,9 @@ Validity.isValidPeriod = function( start, end ){
  *  - index: the index of the new record in the returned array
  */
 Validity.newRecord = function( entity, period, opts={} ){
+    check( entity, Match.ObjectIncluding({ DYN: Match.ObjectIncluding({ records: [ReactiveVar] })}));
+
     let array = entity.DYN.records;
-    assert( _.isArray( array ), 'expect DYN.records be an array' );
     const startField = opts.start || Validity.configure().effectStart;
     const endField = opts.end || Validity.configure().effectEnd;
     let res = null;

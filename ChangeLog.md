@@ -6,7 +6,7 @@
 
     Release date: 
 
-    - 
+    - Remove NodeJS imports from client and common code
 
 ### 1.4.3
 

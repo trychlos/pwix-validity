@@ -3,8 +3,8 @@
  */
 
 import _ from 'lodash';
-const assert = require( 'assert' ).strict;
 
+import { check, Match } from 'meteor/check';
 import { Logger } from 'meteor/pwix:logger';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { TM } from 'meteor/pwix:typed-message';
@@ -14,15 +14,19 @@ const logger = Logger.get();
 Validity.checks = {
     // entity is a ReactiveVar which contains the edited entity document and its validity records
     _assert_data_content( caller, data ){
-        assert.ok( data, caller+' data is required' );
-        assert.ok( data.entity && data.entity instanceof ReactiveVar, caller+' data.entity is expected to be set as a ReactiveVar, got '+data.entity );
+        check( data, Match.ObjectIncluding({ entity: ReactiveVar, index: Match.Where( _.isNumber )}));
         const entity = data.entity.get();
-        assert.ok( entity.DYN && _.isObject( entity.DYN ), caller+' data.entity.DYN is expected to be set as a Object, got '+entity.DYN );
-        assert.ok( entity.DYN.records && _.isArray( entity.DYN.records ), caller+' data.entity.DYN.records is expected to be set as an Array, got '+entity.DYN.records );
-        entity.DYN.records.forEach(( it ) => {
-            assert.ok( it && it instanceof ReactiveVar, caller+' each record is expected to be a ReactiveVar, got '+it );
-        });
-        assert.ok( _.isNumber( data.index ) && data.index >= 0, caller+' data.index is expected to be a positive or zero integer, got '+data.index );
+        check( entity, Match.ObjectIncluding({ DYN: Match.ObjectIncluding({ records: [ReactiveVar] })}));
+        check( data.index, Match.Where(( value ) => { return value >= 0 && value < entity.DYN.records.length }));
+
+        //assert.ok( data, caller+' data is required' );
+        //assert.ok( data.entity && data.entity instanceof ReactiveVar, caller+' data.entity is expected to be set as a ReactiveVar, got '+data.entity );
+        //assert.ok( entity.DYN && _.isObject( entity.DYN ), caller+' data.entity.DYN is expected to be set as a Object, got '+entity.DYN );
+        //assert.ok( entity.DYN.records && _.isArray( entity.DYN.records ), caller+' data.entity.DYN.records is expected to be set as an Array, got '+entity.DYN.records );
+        //entity.DYN.records.forEach(( it ) => {
+        //    assert.ok( it && it instanceof ReactiveVar, caller+' each record is expected to be a ReactiveVar, got '+it );
+        //});
+        //assert.ok( _.isNumber( data.index ) && data.index >= 0, caller+' data.index is expected to be a positive or zero integer, got '+data.index );
     },
 
     // if date is set, it must be valid - it is expected in yyyy-mm-dd format
