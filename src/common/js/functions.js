@@ -593,6 +593,38 @@ Validity.newRecord = function( entity, period, opts={} ){
     };
 };
 
+/**
+ * @summary Provides a label for the given record period.
+ * @param {Object} record a validity record
+ * @returns {String} a suitable translated label for the period
+ */
+Validity.periodLabel = function( record ){
+    check( record, Object );
+    let res = '';
+    const startField = Validity.configure().effectStart;
+    const endField = Validity.configure().effectEnd;
+    // none of dates are valid
+    if( !DateJs.isValid( record[startField] ) && !DateJs.isValid( record[endField] )){
+        //logger.debug( 'Validity.periodLabel() none of two', record[startField], record[endField] )
+        res = pwixI18n.label( I18N, 'tab.full' );
+    // start date is valid
+    } else if( DateJs.isValid( record[startField] )){
+        if( DateJs.isValid( record[endField] )){
+            //logger.debug( 'Validity.periodLabel() both start and end', record[startField], record[endField] );
+            res = pwixI18n.label( I18N, 'tab.from_to', DateJs.toString( record[startField] ), DateJs.toString( record[endField] ));
+        } else {
+            //logger.debug( 'Validity.periodLabel() only start', record[startField], record[endField] )
+            res = pwixI18n.label( I18N, 'tab.from', DateJs.toString( record[startField] ));
+        }
+    // must have end date valid
+    } else {
+        //logger.debug( 'Validity.periodLabel() only end', record[startField], record[endField] )
+        check( record[endField], Match.Where( DateJs.isValid ));
+        res = pwixI18n.label( I18N, 'tab.to', DateJs.toString( record[endField] ));
+    }
+    return res;
+};
+
     /*
     ***
     ***

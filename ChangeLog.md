@@ -2,11 +2,12 @@
 
 ## ChangeLog
 
-### 1.4.4-rc.0
+### 1.5.0-rc.0
 
     Release date: 
 
     - Remove NodeJS imports from client and common code
+    - Define new Validity.periodLabel() function
 
 ### 1.4.3
 

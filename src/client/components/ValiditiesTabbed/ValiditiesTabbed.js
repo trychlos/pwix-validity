@@ -147,18 +147,7 @@ Template.ValiditiesTabbed.onCreated( function(){
 
         // provides the translated label associated with this tab
         itemLabel( it, index ){
-            let res = '';
-            if( !DateJs.isValid( it[self.PCK.startField] ) && !DateJs.isValid( it[self.PCK.endField] )){
-                res = pwixI18n.label( I18N, 'tab.full' );
-            } else if( DateJs.isValid( it[self.PCK.startField] )){
-                if( DateJs.isValid( it[self.PCK.startField] )){
-                    res = pwixI18n.label( I18N, 'tab.from_to', DateJs.toString( it[self.PCK.startField] ), DateJs.toString( it[self.PCK.endField] ));
-                } else {
-                    res = pwixI18n.label( I18N, 'tab.from', DateJs.toString( it[self.PCK.startField] ));
-                }
-            } else {
-                res = pwixI18n.label( I18N, 'tab.to', DateJs.toString( it[self.PCK.endField] ));
-            }
+            const res = Validity.periodLabel( it );
             // add a dropdown menu for all periods
             return ''
                 +'<div class="d-flex justify-content-between align-items-center validity-item-label">'
